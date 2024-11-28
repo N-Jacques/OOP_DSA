@@ -1,17 +1,17 @@
-from category_page import category_page
 from profile_page import profile_page
+from edit_page import edit_page
 
-def home():
+
+def homepage():
     print()
 
-    
 
     print()
     print("=" * 40)
 
     print()
     print("SELECT(1-3):")
-    print()\
+    print()
 
     print("1. PROFILE")
     print("2. MAIN PAGE")
@@ -21,7 +21,7 @@ def home():
 
 def main():
     while True:
-        home()
+        homepage()
 
         print()
         print()
@@ -34,7 +34,7 @@ def main():
             input("\nPress Enter to return")
 
         elif choice == "2":
-            category_page()
+            ()
             input("\nPress Enter to return")
 
         elif choice == "3":
