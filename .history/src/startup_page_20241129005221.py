@@ -42,9 +42,6 @@ def startup(): #
             if login1 == 1:  # Login Page
                 clear_screen()
                 login()
-                time.sleep(3)
-                clear_screen()
-                homepage()
                 
 
             elif login1 == 2:  # Sign-up Page
