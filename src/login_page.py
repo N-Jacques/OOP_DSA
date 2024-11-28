@@ -1,4 +1,5 @@
-# import keyboard
+#import keyboard
+import getpass
 
 def login():
     print("===========================")
@@ -10,19 +11,21 @@ def login():
     try:
         while True:
             # Check if "Esc" key is pressed
-            '''
-            if keyboard.is_pressed('esc'):
+            
+            '''if keyboard.is_pressed("esc"):
                 print("\nReturning to main menu...")
+                from startup_page import startup
+                startup()
                 
-                return  # Exit the login function and return to `startup() '''
+                return  # Exit the login function and return to startup() '''
 
             login_user = input("Enter username: ")
             if login_user.lower() == 'esc':
                 print("Returning to Main Menu...")
                 return
-           
-
-            login_pass = input("Enter password: ")
+            
+            # getpass for password hiding when input 
+            login_pass = getpass.getpass("Enter password: ")
             if login_pass.lower() == 'esc':
                 print("Returning to Main Menu...")
                 return
@@ -32,8 +35,11 @@ def login():
             
 
             break  # Successful login; exit loop
+
+            
     
     except KeyboardInterrupt:
         print("\nReturning to main menu...")
         return  
     
+
