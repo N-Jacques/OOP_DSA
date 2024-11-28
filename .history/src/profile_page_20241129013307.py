@@ -1,4 +1,3 @@
-import os
 import time
 from editProfile_page import editProfile
 
@@ -9,14 +8,6 @@ profile = {
     "password": "default_password",
     "address": "default_address"
 }
-
-
-def clear_screen():
-    if os.name == 'nt':
-        os.system('cls')
-    else:
-        os.system('clear')
-
 
 def display_profile():
     print("Accessing your profile...")
@@ -32,14 +23,13 @@ def display_profile():
 
 def profile_page():
     while True:
-        
+        os.system('cls' if os.name == 'nt' else 'clear')
         print("\nProfile Page:")
         print("1. Display Profile")
         print("2. Edit Profile")
         print("3. Exit Profile Page")
 
         choice = input("\nEnter your choice (1-3): ")
-        clear_screen()
         
 
         if choice == "1":

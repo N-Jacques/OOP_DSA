@@ -61,9 +61,8 @@ def editProfile(profile):
 
         else:
             print("Invalid choice. Please try again.")
-            time.sleep(1)
             clear_screen()
-            
+            time.sleep(1)
 
 
 clear_screen()

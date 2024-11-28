@@ -19,9 +19,7 @@ def homepage():
         print()
         print("1. PROFILE")
         print("2. MAIN PAGE")
-        print("3. VIEW CART")
-        print("4. VIEW ORDER HISTORY")
-        print("5. LOG OUT")
+        print("3. LOG OUT")
         print("=" * 40)
 
         print()

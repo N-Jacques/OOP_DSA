@@ -32,14 +32,13 @@ def display_profile():
 
 def profile_page():
     while True:
-        
+        clear_screen()
         print("\nProfile Page:")
         print("1. Display Profile")
         print("2. Edit Profile")
         print("3. Exit Profile Page")
 
         choice = input("\nEnter your choice (1-3): ")
-        clear_screen()
         
 
         if choice == "1":

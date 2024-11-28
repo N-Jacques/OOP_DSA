@@ -9,7 +9,7 @@ def clear_screen():
         os.system('clear')
 
 
-def editProfile(profile):
+def edit_page(profile):
     while True:
         print("\nEdit Profile Page:")
         print("1. Edit Username")
@@ -60,10 +60,9 @@ def editProfile(profile):
             break
 
         else:
+            clear_screen()
             print("Invalid choice. Please try again.")
             time.sleep(1)
-            clear_screen()
-            
 
 
 clear_screen()

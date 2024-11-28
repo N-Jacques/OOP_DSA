@@ -66,7 +66,8 @@ def startup(): #
                 print(Fore.CYAN + "=" * 77 + "\n")
                 time.sleep(3)
                 
-                sys.exit()
+                
+                # sys.exit()
         
             else:
                 print("Invalid choice. Please select a valid option.")
