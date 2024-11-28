@@ -1,9 +1,12 @@
 #import keyboard
+import getpass
 
 def signup():
-    print("\n\n---------- Sign up Page ----------")
+    print("=============================")
+    print("---------- Sign up ----------")
+    print("=============================")
     print("\n")
-    print("Type 'Esc' at any time to go back to the main menu.\n\n")
+    print("Type 'Esc' at any time to go back to the main menu.\n")
 
     try:
         while True:
@@ -25,7 +28,7 @@ def signup():
                 return
            
 
-            signup_pass = input("Enter Password: ")
+            signup_pass = getpass.getpass("Enter Password: ")
             if signup_pass.lower() == 'esc':
                 print("Returning to Main Menu...")
                 return
@@ -37,5 +40,3 @@ def signup():
     except KeyboardInterrupt:
         print("\nReturning to main menu...")
         return
-
-   
