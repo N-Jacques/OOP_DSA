@@ -1,0 +1,13 @@
+def category_page():
+    print("\nBrowsing the main store. Here are some categories:")
+    print("1. Apparels")
+    print("2. Electronics/Gadgets")
+    print("3. Appliances")
+    print("4. School Supplies")
+    print("5. Cosmetics")
+    print("6. Toys")
+    print("7. Kitchenware")
+    print("8. Toiletries")
+    print("9. Hardware")
+    print("10. Accessories")
+    print("=" * 40)
