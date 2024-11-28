@@ -1,9 +1,11 @@
 # import keyboard
 
 def login():
-    print("\n\n---------- Login Page ----------")
+    print("===========================")
+    print("---------- Login ----------")
+    print("===========================")
     print("\n")
-    print("Type 'Esc' at any time to go back to the main menu.\n\n")
+    print("Type 'Esc' at any time to go back to the main menu.\n")
 
     try:
         while True:

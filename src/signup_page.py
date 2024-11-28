@@ -1,9 +1,11 @@
 #import keyboard
 
 def signup():
-    print("\n\n---------- Sign up Page ----------")
+    print("=============================")
+    print("---------- Sign up ----------")
+    print("=============================")
     print("\n")
-    print("Type 'Esc' at any time to go back to the main menu.\n\n")
+    print("Type 'Esc' at any time to go back to the main menu.\n")
 
     try:
         while True:
@@ -38,4 +40,3 @@ def signup():
         print("\nReturning to main menu...")
         return
 
-   
