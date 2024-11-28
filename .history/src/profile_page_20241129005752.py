@@ -1,5 +1,5 @@
 import time
-from editProfile_page import edit_page
+from edit_page import edit_page
 
 
 profile = {

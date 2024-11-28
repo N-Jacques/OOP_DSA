@@ -1,5 +1,4 @@
-# from profile_page import profile_page
-# from CategoryList import categ
+from profile_page import profile_page
 import os
 
 
@@ -11,16 +10,18 @@ def clear_screen():
 
 
 def homepage():
+    print()
+    print("=" * 40)
+    print()
+    print("SELECT(1-3):")
+    print()
+    print("1. PROFILE")
+    print("2. VIEW PRODUCTS")
+    print("3. LOG OUT")
+    print("=" * 40)
+
     while True:
-        clear_screen()  # Clears the screen before showing the menu
-        print("=" * 40)
-        print()
-        print("SELECT(1-3):")
-        print()
-        print("1. PROFILE")
-        print("2. MAIN PAGE")
-        print("3. LOG OUT")
-        print("=" * 40)
+        clear_screen()
 
         print()
         print()
@@ -28,15 +29,15 @@ def homepage():
         print("Press Enter to return")
         choice = input("Enter your choice (1-3): ").strip()
         print()
-
+        
         if choice == "1":
             clear_screen()
-            # profile_page()
+            profile_page()
             input("\nPress Enter to return")
 
         elif choice == "2":
             clear_screen()
-            # categ()
+            #dito nakalagay view catego
             input("\nPress Enter to return")
 
         elif choice == "3":
@@ -47,3 +48,7 @@ def homepage():
         else:
             clear_screen()
             print("Invalid choice")
+
+
+clear_screen()
+

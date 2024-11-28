@@ -1,5 +1,5 @@
-# from profile_page import profile_page
-# from CategoryList import categ
+from profile_page import profile_page
+from CategoryList import categ
 import os
 
 
@@ -12,7 +12,7 @@ def clear_screen():
 
 def homepage():
     while True:
-        clear_screen()  # Clears the screen before showing the menu
+        clear_screen()  
         print("=" * 40)
         print()
         print("SELECT(1-3):")
@@ -31,12 +31,12 @@ def homepage():
 
         if choice == "1":
             clear_screen()
-            # profile_page()
+            profile_page()
             input("\nPress Enter to return")
 
         elif choice == "2":
             clear_screen()
-            # categ()
+            categ()
             input("\nPress Enter to return")
 
         elif choice == "3":
@@ -47,3 +47,5 @@ def homepage():
         else:
             clear_screen()
             print("Invalid choice")
+
+
