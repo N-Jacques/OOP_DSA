@@ -1,5 +1,5 @@
 from profile_page import profile_page
-from edit_page import edit_page
+from products_page import products
 
 
 def homepage():
@@ -14,12 +14,10 @@ def homepage():
     print()
 
     print("1. PROFILE")
-    print("2. MAIN PAGE")
+    print("2. VIEW PRODUCTS")
     print("3. LOG OUT")
     print("=" * 40)
 
-
-def main():
     while True:
         homepage()
 
@@ -34,7 +32,7 @@ def main():
             input("\nPress Enter to return")
 
         elif choice == "2":
-            ()
+            products()
             input("\nPress Enter to return")
 
         elif choice == "3":
@@ -45,5 +43,5 @@ def main():
             print("invalid choice")
 
 
-if __name__ == "__main__":
-    main()
+
+homepage()

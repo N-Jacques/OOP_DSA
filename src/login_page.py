@@ -1,5 +1,6 @@
 #import keyboard
 import getpass
+from home_page import homepage
 
 def login():
     print("===========================")
@@ -33,7 +34,7 @@ def login():
             print("Login successful, moving to Home...")
             print(f"Welcome back, {login_user}!")
             
-
+            homepage()
             break  # Successful login; exit loop
 
             

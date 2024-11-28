@@ -42,7 +42,7 @@ def startup(): #
             if login1 == 1:  # Login Page
                 clear_screen()
                 login()
-                time.sleep(3)
+                
 
             elif login1 == 2:  # Sign-up Page
                 clear_screen()
@@ -62,16 +62,16 @@ def startup(): #
                 print()
                 print(Fore.CYAN + "=" * 77 + "\n")
 
-                time.sleep(3)
+                
                 
                 # sys.exit()
         
             else:
                 print("Invalid choice. Please select a valid option.")
-                time.sleep(0.5)
+                
 
         except ValueError:
             print("Invalid input. Please enter a number")
-            time.sleep(0.5)
+            
 
 startup()

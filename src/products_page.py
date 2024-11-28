@@ -1,96 +1,55 @@
-import os
-import colorama
-from colorama import Fore, Style, Back
+# productlistCategory.py
+from productsDetails import products
+from category_page import categories
 
-# Initialize colorama for styled text
-colorama.init(autoreset=True)
 
-# Define categories and products
-CATEGORIES = [
-    {"name": "Clothes", "display": Fore.RED + "Clothes" + Style.RESET_ALL},
-    {"name": "Jewelry", "display": Fore.GREEN + "Jewelry" + Style.RESET_ALL},
-    {"name": "Appliances", "display": Fore.BLUE + "Appliances" + Style.RESET_ALL},
-    {"name": "Toiletries", "display": Fore.YELLOW + "Toiletries" + Style.RESET_ALL},
-    {"name": "Kitchenware", "display": Fore.MAGENTA + "Kitchenware" + Style.RESET_ALL},
-]
+def view_by_category(category):
+    print(f"\nProducts in {category}:")
+    print(f"{'ID':<10}{'Name':<15}{'Price':<10}{'Stock':<10}")
+    print("-" * 45)
+    for pid, product in products.items():
+        if product["category"] == category:
+            print(f"{pid:<10}{product['name']:<15}₱{product['price']:<10.2f}{product['stock']:<10}")
 
-PRODUCTS = {
-    "Clothes": [
-        {"id": 1, "name": "T-Shirt", "price": 19.99},
-        {"id": 2, "name": "Jeans", "price": 49.99},
-    ],
-    "Jewelry": [
-        {"id": 1, "name": "Necklace", "price": 99.99},
-        {"id": 2, "name": "Earrings", "price": 79.99},
-    ],
-    "Appliances": [
-        {"id": 1, "name": "Blender", "price": 69.99},
-        {"id": 2, "name": "Toaster", "price": 39.99},
-    ],
-    "Toiletries": [
-        {"id": 1, "name": "Shampoo", "price": 12.99},
-        {"id": 2, "name": "Soap", "price": 5.99},
-    ],
-    "Kitchenware": [
-        {"id": 1, "name": "Plate Set", "price": 34.99},
-        {"id": 2, "name": "Cooking Pot", "price": 59.99},
-    ],
-}
+def view_all_products():
+    print("\nAll Products:")
+    print(f"{'ID':<10}{'Name':<15}{'Price':<10}{'Stock':<10}{'Category':<15}")
+    print("-" * 60)
+    for pid, product in products.items():
+        print(f"{pid:<10}{product['name']:<15}₱{product['price']:<10.2f}{product['stock']:<10}{product['category']:<15}")
 
-# Utility to clear the screen
-def clear_screen():
-    os.system("cls" if os.name == "nt" else "clear")
+def display_menu():
+    print("\n=== Product Viewer ===")
+    print("1. View All Products")
+    print("2. View by Category")
+    print("3. Purchase Product")
+    print("4. Exit")
 
-# Display the banner
-def display_banner():
-    print(Fore.CYAN + "╔" + "═" * 40 + "╗")
-    print("║       " + Fore.YELLOW + "P R O D U C T  S H O P" + Fore.CYAN + "       ║")
-    print("╚" + "═" * 40 + "╝" + Style.RESET_ALL)
+def show_categories():
+    print("\nCategories:")
+    for i, category in enumerate(categories, 1):
+        print(f"{i}. {category}")
 
-# Display categories
-def display_categories():
-    print("\n" + Fore.WHITE + Back.BLACK + " Select Product Category " + Style.RESET_ALL)
-    for i, category in enumerate(CATEGORIES, 1):
-        print(f"{Fore.CYAN}[{i}]{Style.RESET_ALL} {category['display']}")
-    print(f"{Fore.CYAN}[6]{Style.RESET_ALL} " + Fore.RED + "Exit" + Style.RESET_ALL)
-
-# Main function to handle category selection
 def main():
-    clear_screen()
-    display_banner()
-    
     while True:
-        display_categories()
-        try:
-            choice = input(f"\n{Fore.GREEN}Enter category number: {Style.RESET_ALL}")
-            if choice == "6":  # Exit option
-                print(Fore.YELLOW + "\nThank you for shopping!" + Style.RESET_ALL)
-                break
-            
-            category_index = int(choice) - 1
-            
-            if 0 <= category_index < len(CATEGORIES):
-                selected_category = CATEGORIES[category_index]["name"]
-                clear_screen()
-                display_banner()
-                print(f"\n{Fore.GREEN}You selected: {selected_category}{Style.RESET_ALL}\n")
-                # Display products for the selected category
-                display_products(selected_category)
-            else:
-                print(Fore.RED + "\n Invalid category. Please try again." + Style.RESET_ALL)
+        display_menu()
+        choice = input("Enter choice (1-4): ")
         
-        except ValueError:
-            print(Fore.RED + "\n Please enter a valid number." + Style.RESET_ALL)
-
-# Display products for the selected category
-def display_products(category_name):
-    if category_name in PRODUCTS:
-        print(Fore.WHITE + f"Products in {category_name}:\n" + Style.RESET_ALL)
-        for product in PRODUCTS[category_name]:
-            print(f"ID: {product['id']}, Name: {product['name']}, Price: ${product['price']:.2f}")
-    else:
-        print(Fore.RED + "\nNo products available in this category." + Style.RESET_ALL)
+        if choice == "1":
+            view_all_products()
+        elif choice == "2":
+            show_categories()
+            cat_choice = int(input("Select category (1-5): ")) - 1
+            if 0 <= cat_choice < len(categories):
+                view_by_category(categories[cat_choice])
+        elif choice == "3":
+            pid = input("Enter product ID: ")
+            qty = int(input("Enter quantity: "))
+            print(purchase_product(pid, qty))
+        elif choice == "4":
+            print("Thank you for using Product Viewer!")
+            break
 
 if __name__ == "__main__":
+    from purchaseProduct import purchase_product
     main()
- 
