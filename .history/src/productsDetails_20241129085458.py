@@ -30,9 +30,8 @@ def display_product_details(product_id):
     print(f"Stock: {product['stock']}")
 
     # Offer user the option to add to cart or go back
-    print("\nDo you want to add this product to your cart? (y/n): ", end="")  # Make sure the prompt is visible
     while True:
-        choice = input().strip().lower()
+        choice = input("\nDo you want to add this product to your cart? (y/n): ").strip().lower()
         if choice == 'y':
             add_to_cart(product_id)
             print(f"Added {product['name']} to your cart.\n")
@@ -43,7 +42,6 @@ def display_product_details(product_id):
             return  # Return to the previous page (products_page)
         else:
             print("Invalid choice. Please enter 'y' or 'n'.")
-            print("\nDo you want to add this product to your cart? (y/n): ", end="")  # Reprint the prompt
 
 def add_to_cart(product_id):
     """Add product to cart."""

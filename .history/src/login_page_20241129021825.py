@@ -1,6 +1,6 @@
 #import keyboard
 import getpass
-from src.home_page import homepage
+from home_page import homepage
 
 def login():
     print("===========================")

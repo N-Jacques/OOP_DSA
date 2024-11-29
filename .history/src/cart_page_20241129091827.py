@@ -33,9 +33,7 @@ def view_cart():
     while True:
         proceed = input("\nDo you want to proceed to checkout? (yes/no): ").strip().lower()
         if proceed == "yes":
-            from checkout_page import checkout  # Import checkout when needed
-            checkout(cart, total_cost)  # Proceed to checkout, passing cart and total_cost
-            break
+            return total_cost  # Proceed to checkout
         elif proceed == "no":
             print("Returning to the previous page.")
             break

@@ -9,7 +9,14 @@ products = {
     "Frying Pan": 599.99
 }
 
-def view_cart(cart):
+# Cart passed to the checkout
+cart = {
+    "T-shirt": 2,  # 2 T-shirts
+    "Rice Cooker": 1,  # 1 Rice Cooker
+    "Shampoo": 3  # 3 Shampoos
+}
+
+def view_cart():
     """Display the cart contents."""
     if not cart:
         print("\nYour cart is empty.")
@@ -35,14 +42,14 @@ def apply_discounts(total):
         print(f"Discount applied: ₱{discount:,.2f} (5% off)")
     return discount
 
-def checkout(cart, total_cost):
+def checkout():
     """Checkout and generate receipt."""
     print("\nCheckout:")
     if not cart:
         print("Your cart is empty. Add items before checking out.")
         return
 
-    total_cost = view_cart(cart)  # Display the cart and total cost
+    total_cost = view_cart()
     discount = apply_discounts(total_cost)
     final_total = total_cost - discount
 
@@ -51,7 +58,7 @@ def checkout(cart, total_cost):
         confirm = input("Proceed with payment? (yes/no): ").strip().lower()
         if confirm == "yes":
             print("\nPayment successful! Here's your receipt:")
-            generate_receipt(cart, final_total, discount)
+            generate_receipt(final_total, discount)
             break
         elif confirm == "no":
             print("\nPayment canceled.")
@@ -59,7 +66,7 @@ def checkout(cart, total_cost):
         else:
             print("Invalid input. Please type 'yes' or 'no'.")
 
-def generate_receipt(cart, total, discount):
+def generate_receipt(total, discount):
     """Generate and display receipt after successful payment."""
     print("\nReceipt:")
     print("=" * 30)

@@ -1,5 +1,5 @@
 # purchaseProduct.py
-from src.productsDetails import products
+from productsDetails import products
 
 def purchase_product(product_id, quantity):
     if product_id not in products:

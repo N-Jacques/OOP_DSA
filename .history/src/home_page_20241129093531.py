@@ -1,6 +1,6 @@
 from src.profile_page import profile_page
-from src.category_page import category_page
-from src.cart_page import view_cart
+from category_page import category_page
+from cart_page import view_cart
 import os
 
 

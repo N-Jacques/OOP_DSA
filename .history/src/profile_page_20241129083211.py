@@ -1,6 +1,6 @@
 import os
 import time
-from src.editProfile_page import editProfile
+from editProfile_page import editProfile
 
 
 profile = {

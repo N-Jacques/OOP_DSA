@@ -1,4 +1,4 @@
-from src.startup_page import startup  # Import the startup function
+from startup_page import startup  # Import the startup function
 
 def main():
     startup()  # Start the program by calling the startup page function

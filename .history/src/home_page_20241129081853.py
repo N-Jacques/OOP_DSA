@@ -1,6 +1,5 @@
-from src.profile_page import profile_page
-from src.category_page import category_page
-from src.cart_page import view_cart
+from profile_page import profile_page
+# from CategoryList import categ
 import os
 
 
@@ -19,7 +18,7 @@ def homepage():
         print("SELECT(1-3):")
         print()
         print("1. PROFILE")
-        print("2. VIEW PRODUCTS")
+        print("2. MAIN PAGE")
         print("3. VIEW CART")
         print("4. VIEW ORDER HISTORY")
         print("5. LOG OUT")
@@ -39,18 +38,18 @@ def homepage():
 
         elif choice == "2":
             clear_screen()
-            category_page()
+            # categ()
             input("\nPress Enter to return")
 
         elif choice == "3":
             clear_screen()
-            view_cart()
-            input("\nPress Enter to return")
+            print("\nThank you for shopping with us! Logging out")
+            break
 
         elif choice == "4":
             clear_screen()
-            category_page()
-            input("\nPress Enter to return")
+            print("\nThank you for shopping with us! Logging out")
+            break
 
         elif choice == "5":
             clear_screen()

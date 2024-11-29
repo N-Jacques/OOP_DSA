@@ -1,6 +1,5 @@
-from src.profile_page import profile_page
-from src.category_page import category_page
-from src.cart_page import view_cart
+from profile_page import profile_page
+from category_page import category_page
 import os
 
 
@@ -44,7 +43,7 @@ def homepage():
 
         elif choice == "3":
             clear_screen()
-            view_cart()
+            #category_page() TODO
             input("\nPress Enter to return")
 
         elif choice == "4":

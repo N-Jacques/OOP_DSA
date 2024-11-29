@@ -28,16 +28,3 @@ def view_cart():
             total_cost += cost
             print(f"{product}: {quantity} x ₱{products[product]:,.2f} = ₱{cost:,.2f}")
         print(f"\nTotal Cost: ₱{total_cost:,.2f}")
-
-    # Option to proceed to checkout
-    while True:
-        proceed = input("\nDo you want to proceed to checkout? (yes/no): ").strip().lower()
-        if proceed == "yes":
-            from checkout_page import checkout  # Import checkout when needed
-            checkout(cart, total_cost)  # Proceed to checkout, passing cart and total_cost
-            break
-        elif proceed == "no":
-            print("Returning to the previous page.")
-            break
-        else:
-            print("Invalid input. Please type 'yes' or 'no'.")

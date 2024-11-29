@@ -1,6 +1,6 @@
 import os
-from src.productsDetails import products
-from src.productDetails_page import display_product_details  # Import the function to display product details
+from productsDetails import products
+from productDetails_page import display_product_details  # Import the function to display product details
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')

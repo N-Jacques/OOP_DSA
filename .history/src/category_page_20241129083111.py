@@ -1,6 +1,6 @@
 import os
-from src.products_page import display_products, product_selection
-from src.productDetails_page import display_product_details
+from products_page import display_products, product_selection
+from productDetails_page import display_product_details
 
 # Define categories directly in this file
 categories = ["Clothes", "Jewelry", "Appliances", "Toiletries", "Kitchenware"]

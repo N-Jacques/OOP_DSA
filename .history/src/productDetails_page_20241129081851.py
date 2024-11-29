@@ -1,5 +1,5 @@
 import os
-from src.productsDetails import products
+from productsDetails import products
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
