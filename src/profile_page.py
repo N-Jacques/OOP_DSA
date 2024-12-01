@@ -48,7 +48,7 @@ def profile_page():
             editProfile(profile)  # Pass the shared profile dictionary
         elif profile_choice == "3":
             print("Exiting Profile Page...")
-            from home_page import homepage
+            from src.home_page import homepage
             homepage()
             break
         else:
