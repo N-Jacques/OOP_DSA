@@ -1,6 +1,5 @@
 from src.login_page import login
 from src.signup_page import signup
-from src.home_page import homepage
 from colorama import Fore, Back, Style, init
 import sys
 import time 
@@ -44,9 +43,7 @@ def startup(): #
                 clear_screen()
                 login()
                 clear_screen()
-                homepage()
                 
-
             elif startup_choice == 2:  # Sign-up Page
                 clear_screen()
                 signup()

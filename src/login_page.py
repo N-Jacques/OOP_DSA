@@ -1,5 +1,5 @@
 import getpass
-from src.home_page import homepage
+from src.home_page import home
 import sqlite3
 import time
 
@@ -29,25 +29,27 @@ def login():
             login_user = input("Enter username: ")
             if login_user.lower() == 'esc':
                 print("Returning to Main Menu...")
-                return
-            
-            # getpass for password hiding when input 
+                return  # Exit function
+
+            # Get password securely
             login_pass = getpass.getpass("Enter password: ")
             if login_pass.lower() == 'esc':
                 print("Returning to Main Menu...")
-                return
+                return  # Exit function
 
-            # Verify the user
+            # Verify credentials
             if verify_user(login_user, login_pass):
+                print("\n")
                 print("Login successful, moving to Home...")
+                print("\n")
                 print(f"Welcome back, {login_user}!")
-                time.sleep(2)
-                homepage()
-                break  # Successful login; exit loop
+                time.sleep(1.5)
+                home()  # Proceed to homepage only on successful login
+                return  # Ensure function exits after proceeding
             else:
                 print("Invalid username or password. Please try again.\n")
-    
+
     except KeyboardInterrupt:
         print("\nReturning to main menu...")
-        return  
+        return
 
