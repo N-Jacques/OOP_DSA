@@ -1,5 +1,9 @@
 #import keyboard
 import getpass
+import sqlite3
+
+user_data = sqlite3.connect(db_path)  # Connect to the database
+db_path = "./database/data.db"  # Relative path to your database file
 
 def signup():
     print("=============================")

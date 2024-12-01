@@ -1,6 +1,19 @@
-#import keyboard
 import getpass
 from src.home_page import homepage
+import sqlite3
+
+user_data = sqlite3.connect(db_path)  # Connect to the database
+db_path = "./database/data.db"  # Relative path to your database file
+
+def verify_user(username, password):
+    """
+    Verify if the provided username and password exist in the database.
+    """
+    cursor = user_data.cursor()
+    query = "SELECT * FROM user WHERE username = ? AND password = ?"
+    cursor.execute(query, (username, password))
+    result = cursor.fetchone()
+    return result is not None  # True if a matching record is found, False otherwise
 
 def login():
     print("===========================")
@@ -11,15 +24,6 @@ def login():
 
     try:
         while True:
-            # Check if "Esc" key is pressed
-            
-            '''if keyboard.is_pressed("esc"):
-                print("\nReturning to main menu...")
-                from startup_page import startup
-                startup()
-                
-                return  # Exit the login function and return to startup() '''
-
             login_user = input("Enter username: ")
             if login_user.lower() == 'esc':
                 print("Returning to Main Menu...")
@@ -31,16 +35,16 @@ def login():
                 print("Returning to Main Menu...")
                 return
 
-            print("Login successful, moving to Home...")
-            print(f"Welcome back, {login_user}!")
-            
-            homepage()
-            break  # Successful login; exit loop
-
-            
+            # Verify the user
+            if verify_user(login_user, login_pass):
+                print("Login successful, moving to Home...")
+                print(f"Welcome back, {login_user}!")
+                homepage()
+                break  # Successful login; exit loop
+            else:
+                print("Invalid username or password. Please try again.\n")
     
     except KeyboardInterrupt:
         print("\nReturning to main menu...")
         return  
-    
 

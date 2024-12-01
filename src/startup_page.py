@@ -12,6 +12,7 @@ init(autoreset=True) # Initialize Colorama
 def clear_screen(): # Clear screen every input 
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
 def startup(): # 
     while True:  # Allow the user to return here
         try:
