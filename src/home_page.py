@@ -13,7 +13,7 @@ def clear_screen():
 
 def homepage():
     while True:
-        clear_screen()  # Clears the screen before showing the menu
+        clear_screen() 
         print("=" * 40)
         print()
         print("SELECT(1-3):")
