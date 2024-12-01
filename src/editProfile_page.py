@@ -2,14 +2,14 @@ import time
 import os
 
 
-def clear_screen():
+def clear_screen(): #clears screen
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
 
-def editProfile(profile):
+def editProfile(profile): #will display option for user to choose 
     while True:
         print("\nEdit Profile Page:")
         print("1. Edit Username")
@@ -55,7 +55,7 @@ def editProfile(profile):
         elif choice == "5":
             clear_screen()
             print("Exiting Edit Options...\n")
-            from profile_page import profile_page
+            from src.profile_page import profile_page
             profile_page()
             break
 

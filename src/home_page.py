@@ -4,14 +4,14 @@ from src.cart_page import view_cart
 import os
 
 
-def clear_screen():
+def clear_screen(): #clears screen
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
 
-def homepage():
+def home(): #will display an option for user to choose 
     while True:
         clear_screen() 
         print("=" * 40)

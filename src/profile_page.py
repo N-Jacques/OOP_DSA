@@ -11,14 +11,14 @@ profile = {
 }
 
 
-def clear_screen():
+def clear_screen(): #clears screen
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
 
-def display_profile():
+def display_profile(): #will display the infos of the user
     print("Accessing your profile...")
     print()
 
@@ -30,7 +30,7 @@ def display_profile():
     print(f"Order History: 5 orders")
     print("=" * 40)
 
-def profile_page():
+def profile_page(): #provides choices for the user
     while True:
         
         print("\nProfile Page:")
@@ -48,8 +48,8 @@ def profile_page():
             editProfile(profile)  # Pass the shared profile dictionary
         elif profile_choice == "3":
             print("Exiting Profile Page...")
-            from src.home_page import homepage
-            homepage()
+            from src.home_page import home
+            home()
             break
         else:
             print("ERROR! TRY AGAIN.\n")
