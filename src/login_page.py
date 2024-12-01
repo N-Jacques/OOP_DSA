@@ -1,5 +1,5 @@
 import getpass
-from src.home_page import homepage
+from src.home_page import home
 import sqlite3
 import time
 
@@ -44,7 +44,7 @@ def login():
                 print("\n")
                 print(f"Welcome back, {login_user}!")
                 time.sleep(1.5)
-                homepage()  # Proceed to homepage only on successful login
+                home()  # Proceed to homepage only on successful login
                 return  # Ensure function exits after proceeding
             else:
                 print("Invalid username or password. Please try again.\n")
