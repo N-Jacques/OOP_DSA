@@ -44,9 +44,7 @@ def startup(): #
                 clear_screen()
                 login()
                 clear_screen()
-                homepage()
                 
-
             elif startup_choice == 2:  # Sign-up Page
                 clear_screen()
                 signup()
