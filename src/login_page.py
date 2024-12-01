@@ -1,6 +1,7 @@
 import getpass
 from src.home_page import homepage
 import sqlite3
+import time
 
 db_path = "./database/data.db"  # Correct path to the database file
 user_data = sqlite3.connect(db_path)  # Now using the actual path to connect
@@ -40,6 +41,7 @@ def login():
             if verify_user(login_user, login_pass):
                 print("Login successful, moving to Home...")
                 print(f"Welcome back, {login_user}!")
+                time.sleep(2)
                 homepage()
                 break  # Successful login; exit loop
             else:

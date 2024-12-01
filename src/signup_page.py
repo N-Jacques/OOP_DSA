@@ -1,9 +1,9 @@
-#import keyboard
 import getpass
 import sqlite3
+import time
 
-user_data = sqlite3.connect("db_path")  # Connect to the database
 db_path = "./database/data.db"  # Relative path to your database file
+user_data = sqlite3.connect(db_path)  # Connect to the database
 
 def signup():
     print("=============================")
@@ -14,15 +14,13 @@ def signup():
 
     try:
         while True:
-            # Check if "Esc" key is pressed
-            '''
-            if keyboard.is_pressed('esc'):
-                print("\nReturning to main menu...")
-                
-                return  # Exit the login function and return to `startup() '''
-
-            signup_name = input("Enter your Name: ")
-            if signup_name.lower() == 'esc':
+            signup_fname = input("Enter your First Name: ")
+            if signup_fname.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+            
+            signup_lname = input("Enter your Last Name: ")
+            if signup_lname.lower() == 'esc':
                 print("Returning to Main Menu...")
                 return
 
@@ -31,16 +29,79 @@ def signup():
                 print("Returning to Main Menu...")
                 return
            
-
             signup_pass = getpass.getpass("Enter Password: ")
             if signup_pass.lower() == 'esc':
                 print("Returning to Main Menu...")
                 return
-
-            print("Sign up successful, Please Log in")
             
-            break  # Successful login; exit loop
+            signup_phone = input("Enter Phone number (09xxxxxxxxx): ")
+            if signup_phone.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+            
+            print("\nEnter your Address Details below: ")
+            print("")
+            
+            signup_street = input("Enter Street (Required): ")
+            if signup_street.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+
+            signup_house = input("Enter House No. (Required): ")
+            if signup_house.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+            
+            signup_room = input("Enter Room No. (Leave empty if not applicable): ")
+            if signup_room.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+            
+            signup_city = input("Enter City (Required): ")
+            if signup_city.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+            
+            signup_region = input("Enter Region (Leave empty if not applicable): ")
+            if signup_region.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+            
+            signup_zip = input("Enter Zip Code (Leave empty if not applicable): ")
+            if signup_zip.lower() == 'esc':
+                print("Returning to Main Menu...")
+                return
+
+            # Check if the username already exists
+            cursor = user_data.cursor()
+            query = "SELECT * FROM user WHERE username = ?"
+            cursor.execute(query, (signup_user,))
+            result = cursor.fetchone()
+
+            if result:
+                print("Username already exists. Please choose a different one.")
+            else:
+                # Insert the user information into the 'user' table
+                insert_user_query = "INSERT INTO user (first_name, last_name, username, password, phone) VALUES (?, ?, ?, ?, ?)"
+                cursor.execute(insert_user_query, (signup_fname, signup_lname, signup_user, signup_pass, signup_phone))
+                user_data.commit()
+
+                # Get the last inserted user_id to link with the address
+                user_id = cursor.lastrowid
+                
+                # Insert the address details into the 'address' table
+                insert_address_query = """INSERT INTO address (user_id, street_name, house_number, room_number, city, region, zip_code) 
+                                          VALUES (?, ?, ?, ?, ?, ?, ?)"""
+                cursor.execute(insert_address_query, (user_id, signup_street, signup_house, signup_room, signup_city, signup_region, signup_zip))
+                user_data.commit()
+
+                print("\nSign up successful, Please Log in")
+                time.sleep(2)
+            
+            break  # Successful sign-up; exit loop
     
     except KeyboardInterrupt:
         print("\nReturning to main menu...")
         return
+    finally:
+        user_data.close()  # Ensure the connection is closed at the end of the program
