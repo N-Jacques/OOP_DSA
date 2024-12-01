@@ -2,8 +2,8 @@ import getpass
 import sqlite3
 import time
 
-db_path = "./database/data.db"  # Relative path to your database file
-user_data = sqlite3.connect(db_path)  # Connect to the database
+db_path = "./database/data.db"  # Path to your database file
+user_data = sqlite3.connect('db_path')  # Connect to the database
 
 def signup():
     print("=============================")
@@ -40,7 +40,6 @@ def signup():
                 return
             
             print("\nEnter your Address Details below: ")
-            print("")
             
             signup_street = input("Enter Street (Required): ")
             if signup_street.lower() == 'esc':
@@ -74,34 +73,33 @@ def signup():
 
             # Check if the username already exists
             cursor = user_data.cursor()
-            query = "SELECT * FROM user WHERE username = ?"
+            query = "SELECT * FROM User WHERE username = ?"
             cursor.execute(query, (signup_user,))
             result = cursor.fetchone()
 
             if result:
                 print("Username already exists. Please choose a different one.")
             else:
-                # Insert the user information into the 'user' table
-                insert_user_query = "INSERT INTO user (first_name, last_name, username, password, phone) VALUES (?, ?, ?, ?, ?)"
+                # Insert user details into the User table
+                insert_user_query = "INSERT INTO User (first_name, last_name, username, password, phone_number) VALUES (?, ?, ?, ?, ?)"
                 cursor.execute(insert_user_query, (signup_fname, signup_lname, signup_user, signup_pass, signup_phone))
                 user_data.commit()
 
-                # Get the last inserted user_id to link with the address
+                # Get the last inserted user_id (if User and Address are linked)
                 user_id = cursor.lastrowid
                 
-                # Insert the address details into the 'address' table
-                insert_address_query = """INSERT INTO address (user_id, street_name, house_number, room_number, city, region, zip_code) 
-                                          VALUES (?, ?, ?, ?, ?, ?, ?)"""
-                cursor.execute(insert_address_query, (user_id, signup_street, signup_house, signup_room, signup_city, signup_region, signup_zip))
+                # Insert address details into the Address table
+                insert_address_query = """INSERT INTO Address (street_name, house_number, room_number, city, region, zip_code) 
+                                          VALUES (?, ?, ?, ?, ?, ?)"""
+                cursor.execute(insert_address_query, (signup_street, signup_house, signup_room, signup_city, signup_region, signup_zip))
                 user_data.commit()
 
-                print("\nSign up successful, Please Log in")
+                print("\nSign up successful! Please log in.")
                 time.sleep(2)
-            
-            break  # Successful sign-up; exit loop
+                break  # Successful sign-up; exit loop
     
     except KeyboardInterrupt:
         print("\nReturning to main menu...")
         return
     finally:
-        user_data.close()  # Ensure the connection is closed at the end of the program
+        user_data.close()  # Ensure the database connection is closed
