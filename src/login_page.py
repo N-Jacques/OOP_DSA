@@ -22,18 +22,18 @@ def login():
     print("---------- Login ----------")
     print("===========================")
     print("\n")
-    print("Type 'Esc' at any time to go back to the main menu.\n")
+    print("Type '/' at any time to go back to the main menu.\n")
 
     try:
         while True:
             login_user = input("Enter username: ")
-            if login_user.lower() == 'esc':
+            if login_user.lower() == '/':
                 print("Returning to Main Menu...")
                 return  # Exit function
 
             # Get password securely
             login_pass = getpass.getpass("Enter password: ")
-            if login_pass.lower() == 'esc':
+            if login_pass.lower() == '/':
                 print("Returning to Main Menu...")
                 return  # Exit function
 

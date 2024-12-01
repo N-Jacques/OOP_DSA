@@ -1,32 +1,25 @@
-import keyboard  # Add this import
 import getpass
 import sqlite3
 import time
 
 db_path = "./database/data.db"  # Path to your database file
-user_data = sqlite3.connect(db_path)  # Corrected variable usage here
+user_data = sqlite3.connect(db_path)  # Connect to the database
 
 def signup():
     print("=============================")
     print("---------- Sign up ----------")
     print("=============================")
     print("\n")
-    print("Press 'Esc' at any time to go back to the main menu.\n")
+    print("Type '/' at any time to go back to the main menu.\n")
 
-    def esc_pressed():
-        print("\nReturning to Main Menu...")
-        return True
-
+    cursor = None  # Initialize cursor to None to avoid reference error in the finally block
+    
     try:
         while True:
-            if keyboard.is_pressed('esc'):  # Check if 'Esc' is pressed
-                esc_pressed()
-                return
-
             while True:
                 signup_fname = input("Enter your First Name: ").strip()
-                if keyboard.is_pressed('esc'):
-                    esc_pressed()
+                if signup_fname.lower() == '/':
+                    print("Returning to Main Menu...")
                     return
                 if not signup_fname:  # Check if the input is blank
                     print("Error: First name cannot be blank.\n")
@@ -35,8 +28,8 @@ def signup():
 
             while True:
                 signup_lname = input("Enter your Last Name: ").strip()
-                if keyboard.is_pressed('esc'):
-                    esc_pressed()
+                if signup_lname.lower() == '/':
+                    print("Returning to Main Menu...")
                     return
                 if not signup_lname:  # Check if the input is blank
                     print("Error: Last name cannot be blank.\n")
@@ -45,8 +38,8 @@ def signup():
 
             while True:
                 signup_user = input("Enter New Username: ")
-                if keyboard.is_pressed('esc'):
-                    esc_pressed()
+                if signup_user.lower() == '/':
+                    print("Returning to Main Menu...")
                     return
 
                 # Check if username already exists
@@ -59,49 +52,49 @@ def signup():
                     print("Error: Username already taken. Please choose a different username.\n")
                 else:
                     break  # Username is available, exit loop
-
+           
             signup_pass = getpass.getpass("Enter Password: ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_pass.lower() == '/':
+                print("Returning to Main Menu...")
                 return
-
+            
             signup_phone = input("Enter Phone number (09xxxxxxxxx): ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_phone.lower() == '/':
+                print("Returning to Main Menu...")
                 return
-
+            
             print("\nEnter your Address Details below: ")
-
+            
             signup_street = input("Enter Street (Required): ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_street.lower() == '/':
+                print("Returning to Main Menu...")
                 return
 
             signup_house = input("Enter House No. (Required): ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_house.lower() == '/':
+                print("Returning to Main Menu...")
                 return
-
+            
             signup_room = input("Enter Room No. (Leave empty if not applicable): ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_room.lower() == '/':
+                print("Returning to Main Menu...")
                 return
-
+            
             signup_city = input("Enter City (Required): ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_city.lower() == '/':
+                print("Returning to Main Menu...")
                 return
-
+            
             signup_region = input("Enter Region (Leave empty if not applicable): ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_region.lower() == '/':
+                print("Returning to Main Menu...")
                 return
-
+            
             signup_zip = input("Enter Zip Code (Leave empty if not applicable): ")
-            if keyboard.is_pressed('esc'):
-                esc_pressed()
+            if signup_zip.lower() == '/':
+                print("Returning to Main Menu...")
                 return
-
+        
             # Insert user details into the User table
             cursor = user_data.cursor()
             insert_user_query = """
@@ -131,4 +124,4 @@ def signup():
 
     finally:
         if cursor:
-            cursor.close()
+            cursor.close()  # Safe to close cursor
