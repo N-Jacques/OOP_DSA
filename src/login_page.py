@@ -1,14 +1,12 @@
 import getpass
 from src.home_page import homepage
 import sqlite3
+import keyboard
 
 user_data = sqlite3.connect("db_path")  # Connect to the database
 db_path = "./database/data.db"  # Relative path to your database file
 
-def verify_user(username, password):
-    """
-    Verify if the provided username and password exist in the database.
-    """
+def verify_user(username, password): # Verify if the provided username and password exist in the database.
     cursor = user_data.cursor()
     query = "SELECT * FROM user WHERE username = ? AND password = ?"
     cursor.execute(query, (username, password))
