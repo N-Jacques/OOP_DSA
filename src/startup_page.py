@@ -66,10 +66,12 @@ def startup(): #
                 sys.exit()
         
             else:
-                print("Invalid choice. Please select a valid option.")
+                print(Fore.RED + Style.BRIGHT +"Invalid choice. Please select a valid option.")
+                time.sleep(1)
                 
 
         except ValueError:
-            print("Invalid input. Please enter a number")
+            print(Fore.RED + Style.BRIGHT +"Invalid input. Please enter a number")
+            time.sleep(1)
             
 

@@ -1,15 +1,25 @@
 import getpass
 import sqlite3
 import time
+from colorama import Fore, Style, init
 
 db_path = "./database/data.db"  # Path to your database file
 user_data = sqlite3.connect(db_path)  # Connect to the database
 
+init(autoreset=True) # Initialize colorama
+
 def signup():
-    print("=============================")
-    print("---------- Sign up ----------")
-    print("=============================")
-    print("\n")
+    print(Fore.GREEN + "=" * 49)
+    print("")
+    print(Fore.YELLOW + "███████╗██╗ ██████╗ ███╗   ██╗    ██╗   ██╗██████╗ ")
+    print(Fore.YELLOW + "██╔════╝██║██╔════╝ ████╗  ██║    ██║   ██║██╔══██╗")
+    print(Fore.YELLOW + "███████╗██║██║  ███╗██╔██╗ ██║    ██║   ██║██████╔╝")
+    print(Fore.YELLOW + "╚════██║██║██║   ██║██║╚██╗██║    ██║   ██║██╔═══╝ ")
+    print(Fore.YELLOW + "███████║██║╚██████╔╝██║ ╚████║    ╚██████╔╝██║     ")
+    print(Fore.YELLOW + "╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝     ╚═════╝ ╚═╝     ")
+    print("")
+    print(Fore.GREEN + "=" * 49)
+    print("")
     print("Type '/' at any time to go back to the main menu.\n")
 
     cursor = None  # Initialize cursor to None to avoid reference error in the finally block
@@ -20,9 +30,10 @@ def signup():
                 signup_fname = input("Enter your First Name: ").strip()
                 if signup_fname.lower() == '/':
                     print("Returning to Main Menu...")
+                    time.sleep(1.5)
                     return
                 if not signup_fname:  # Check if the input is blank
-                    print("Error: First name cannot be blank.\n")
+                    print(Fore.RED + Style.BRIGHT + "Error: First name cannot be blank.\n")
                 else:
                     break  # Valid input
 
@@ -30,17 +41,23 @@ def signup():
                 signup_lname = input("Enter your Last Name: ").strip()
                 if signup_lname.lower() == '/':
                     print("Returning to Main Menu...")
+                    time.sleep(1.5)
                     return
                 if not signup_lname:  # Check if the input is blank
-                    print("Error: Last name cannot be blank.\n")
+                    print(Fore.RED + Style.BRIGHT + "Error: Last name cannot be blank.\n")
                 else:
                     break  # Valid input
 
             while True:
-                signup_user = input("Enter New Username: ")
+                signup_user = input("Enter New Username: ").strip()
                 if signup_user.lower() == '/':
                     print("Returning to Main Menu...")
+                    time.sleep(1.5)
                     return
+
+                if not signup_user:  # Check if the input is blank
+                    print(Fore.RED + Style.BRIGHT + "Error: Username cannot be blank.\n")
+                    continue  # Restart the loop for another attempt
 
                 # Check if username already exists
                 cursor = user_data.cursor()
@@ -48,19 +65,21 @@ def signup():
                 cursor.execute(query, (signup_user,))
                 result = cursor.fetchone()
 
-                if result:
-                    print("Error: Username already taken. Please choose a different username.\n")
+                if result:  # If username exists
+                    print(Fore.RED + Style.BRIGHT + "Error: Username already taken. Please choose a different username.\n")
                 else:
-                    break  # Username is available, exit loop
-           
+                    break  # Valid input and username is available
+                    
             signup_pass = getpass.getpass("Enter Password: ")
             if signup_pass.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
             
             signup_phone = input("Enter Phone number (09xxxxxxxxx): ")
             if signup_phone.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
             
             print("\nEnter your Address Details below: ")
@@ -68,31 +87,37 @@ def signup():
             signup_street = input("Enter Street (Required): ")
             if signup_street.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
 
             signup_house = input("Enter House No. (Required): ")
             if signup_house.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
             
             signup_room = input("Enter Room No. (Leave empty if not applicable): ")
             if signup_room.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
             
             signup_city = input("Enter City (Required): ")
             if signup_city.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
             
             signup_region = input("Enter Region (Leave empty if not applicable): ")
             if signup_region.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
             
             signup_zip = input("Enter Zip Code (Leave empty if not applicable): ")
             if signup_zip.lower() == '/':
                 print("Returning to Main Menu...")
+                time.sleep(1.5)
                 return
         
             # Insert user details into the User table
