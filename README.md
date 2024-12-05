@@ -1,6 +1,7 @@
-# for Braven Reyes
+Online Shopping Python Program (Terminal Based)
 
-# Files assigned
-# Startup_page.py
-# Login_page.py
-# Signup_page.py
+Carlos Dy Noora Reyes Roxas
+
+Copyright  December 2024 
+
+Made in accordance with Object-Oriented Programming and Data Structures and Algorithms subjects
