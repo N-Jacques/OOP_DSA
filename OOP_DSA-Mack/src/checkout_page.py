@@ -1,1 +1,0 @@
-# checkout_page.py
