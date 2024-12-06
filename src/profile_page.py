@@ -86,40 +86,36 @@ def display_profile(profile):
 
 
 
-"""Provides options to view, edit, or exit the profile."""
 def profile_page():
-    
-    global profile
-    username = input("Enter your username to load the profile: ").strip()  # Example username input
+    username = input("Enter your username to load the profile: ").strip()
     profile = fetch_user_data(username)
-    
+
     if not profile:
         print("Profile not found. Returning to the homepage.")
         time.sleep(2)
         return
 
     while True:
-
         display_profile(profile)
 
         print("1. Edit Profile")
         print("2. Order History")
         print("3. Exit Profile Page")
 
-        profile_choice = input("\nEnter your choice (1-2): ").strip()
+        profile_choice = input("\nEnter your choice (1-3): ").strip()
         clear_screen()
 
         if profile_choice == "1":
-            editProfile(profile)  # Call the edit profile function
+            editProfile(profile)
+            profile = fetch_user_data(profile["username"])  # Reload profile
 
-        elif order_choice == "2":
-            from src.order_history import order_choice  # Ensure the `home` function exists
+        elif profile_choice == "2":
+            from src.order_history import order_choice
             order_choice()
-            break
 
         elif profile_choice == "3":
             print("Exiting Profile Page...")
-            from src.home_page import home  # Ensure the `home` function exists
+            from src.home_page import home
             home()
             break
 
