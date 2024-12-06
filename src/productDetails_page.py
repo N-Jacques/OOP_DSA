@@ -24,7 +24,7 @@ def get_product_details(product_id: str) -> Optional[Dict[str, str]]:
             
             # Fetch all available color variants for the product
             cursor.execute("""
-                SELECT p.category, p.product_name, p.description, 
+                SELECT p.category, p.product_name, p.short_description, 
                        GROUP_CONCAT(pc.color, ', ') as colors,
                        pc.price, pc.stock
                 FROM product p
@@ -37,9 +37,8 @@ def get_product_details(product_id: str) -> Optional[Dict[str, str]]:
 
             if product_details:
                 return {
-                    "category": product_details[0],
                     "product_name": product_details[1],
-                    "description": product_details[2],
+                    "short_description": product_details[2],
                     "colors": product_details[3],
                     "price": product_details[4],
                     "stock": product_details[5]
@@ -70,7 +69,7 @@ def display_product_details(product_id: str) -> None:
         print(f"\n=== Product Details ===")
         print(f"Category: {product_details['category']}")
         print(f"Product Name: {product_details['product_name']}")
-        print(f"Description: {product_details['description']}")
+        print(f"Description: {product_details['short_description']}")
         print(f"Color: {product_details['colors']}")
         print(f"Price: ₱{product_details['price']}")
         print(f"Stock: {product_details['stock']}")

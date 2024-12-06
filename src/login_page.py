@@ -4,6 +4,7 @@ import sqlite3
 import time
 from colorama import Fore, Style, init
 
+
 db_path = "./database/data.db"  # Correct path to the database file
 user_data = sqlite3.connect(db_path)  # Now using the actual path to connect
 

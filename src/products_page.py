@@ -26,14 +26,14 @@ def get_products(category: Optional[str] = None) -> Dict[str, Dict]:
             # Prepare the SQL query based on whether a category is specified
             if category:
                 cursor.execute("""
-                    SELECT p.product_id, p.product_name, p.description, pc.color, pc.price, pc.stock
+                    SELECT p.product_id, p.product_name, p.short_description, pc.color, pc.price, pc.stock
                     FROM product p
                     JOIN product_color pc ON p.product_id = pc.product_id
                     WHERE p.category = ?
                 """, (category,))
             else:
                 cursor.execute("""
-                    SELECT p.product_id, p.product_name, p.description, pc.color, pc.price, pc.stock
+                    SELECT p.product_id, p.product_name, p.short_description, pc.color, pc.price, pc.stock
                     FROM product p
                     JOIN product_color pc ON p.product_id = pc.product_id
                 """)
