@@ -1,48 +1,48 @@
 import os
 import time
 import sqlite3
-from src.editProfile_page import editProfile
+from src.editProfile_page import editProfile  # Ensure the path and module exist
 
-db_path = "./database/data.db"  # Path to your database file
-user_data = sqlite3.connect(db_path)  # Now using the actual path to connect
+# Path to the SQLite database file
+db_path = "./database/data.db"
 
-
-# Default profile values
-default_profile = {
-    "username": "default_user",
-    "profile_name": "Default Name",
-    "password": "default_password",
-    "address": "default_address",
-}
-
-def clear_screen():  # Clears the screen
-    if os.name == 'nt':
+"""Clears the terminal screen."""
+def clear_screen():
+    if os.name == 'nt':  # For Windows
         os.system('cls')
-    else:
+    else:  # For macOS/Linux
         os.system('clear')
 
-def verify_user(username, password): # Verify if the provided username and password exist in the database.
-    cursor = user_data.cursor() # Object to interact with database
-    query = "SELECT * FROM User WHERE username = ? AND password = ?" # SQL syntax to check if input exists 
-    cursor.execute(query, (username, password)) # SQL query of the input username and password
-    result = cursor.fetchone() # Fetch first matching record 
-    return result is not None  # True if a matching record is found, False otherwise
+try:
+    user_data = sqlite3.connect(db_path)  # Connect to the database
+except sqlite3.Error as e:
+    print(f"Database connection error: {e}")
+    exit(1)
 
 
-# Initialize profile dictionary with default values
-profile = default_profile.copy()
-
-# Function to fetch user data from the database
-def fetch_user_data(username):
-    """Fetches user data from the database or defaults if the database is unavailable."""
+"""Verify if the provided username and password exist in the database."""
+def verify_user(username, password):
     try:
         cursor = user_data.cursor()
+        query = "SELECT * FROM User WHERE username = ? AND password = ?"
+        cursor.execute(query, (username, password))
+        result = cursor.fetchone()
+        return result is not None
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return False
 
+
+"""Fetches user data from the database."""
+def fetch_user_data(username):
+    try:
+        cursor = user_data.cursor()
         # Query to retrieve user information
-        cursor.execute("SELECT first_name, last_name, password, address_id FROM user WHERE username = ?", (username,))
+        cursor.execute(
+            "SELECT first_name, last_name, password, address_id FROM user WHERE username = ?",(username,))
+        
         user = cursor.fetchone()
 
-        # Check if user exists in the database
         if user:
             return {
                 "username": username,
@@ -50,63 +50,61 @@ def fetch_user_data(username):
                 "password": user[2],
                 "address_id": user[3],
             }
+        
         else:
-            print("User not found in the database. Loading default profile.")
+            print("User not found in the database.")
             time.sleep(2)
             clear_screen()
-            return default_profile
-
+            return None
+        
     except sqlite3.Error as error:
         print(f"Database error: {error}. Loading default profile.")
-        return default_profile  # Load default profile if any error occurs
+        return None
 
-
-def display_profile():
-    """Displays user profile information and order history."""
-    global profile
-    profile = fetch_user_data(profile["username"])  # Refresh profile data from database or default
+"""Displays user profile information."""
+def display_profile(profile):
 
     try:
-        cursor = user_data.cursor()
 
         print("Accessing your profile...")
-        time.sleep(0.5)
+        time.sleep(1)
         print("=" * 40)
         print(f"Username: {profile['username']}")
         print(f"Name: {profile['profile_name']}")
         print(f"Password: {profile['password']}")
-        print(f"Address: {profile.get('address')}")
+        print(f"Address ID: {profile['address_id']}")
         print("=" * 40)
 
-    except sqlite3.Error as error:
+    except KeyError as error:
+        print(f"Error displaying profile: Missing {error}")
 
 
-        print("=" * 40)
-        print(f"Username: {profile['username']}")
-        print(f"Name: {profile['profile_name']}")
-        print(f"Password: {profile['password']}")
-        print(f"Address: {profile.get('address', 'N/A')}")
-        print("=" * 40)
 
+"""Provides options to view, edit, or exit the profile."""
 def profile_page():
-    """Provides options to view, edit, or exit the profile."""
     
-    while True:
+    global profile
+    username = input("Enter your username to load the profile: ").strip()  # Example username input
+    profile = fetch_user_data(username)
+    
+    if not profile:
+        print("Profile not found. Returning to the homepage.")
+        time.sleep(2)
+        return
 
-        display_profile()
+    while True:
+        display_profile(profile)
         print("1. Edit Profile")
         print("2. Exit Profile Page")
-        profile_choice = input("\nEnter your choice (1-3): ").strip()
+        profile_choice = input("\nEnter your choice (1-2): ").strip()
         clear_screen()
 
         if profile_choice == "1":
-            editProfile(profile)
-
+            editProfile(profile)  # Call the edit profile function
         elif profile_choice == "2":
             print("Exiting Profile Page...")
-            from src.home_page import home
+            from src.home_page import home  # Ensure the `home` function exists
             home()
             break
-
         else:
-            print("ERROR! TRY AGAIN.\n")
+            print("Invalid choice! Please try again.\n")
