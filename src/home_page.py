@@ -51,7 +51,7 @@ def home(user_id): # main function of the homepage
 
         if choice == "1":
             clear_screen()
-            profile_page() # TODO insert user_id when done linking user_id in profile page 
+            profile_page(user_id) # TODO insert user_id when done linking user_id in profile page 
             input("\nPress Enter to return")
 
         elif choice == "2":
