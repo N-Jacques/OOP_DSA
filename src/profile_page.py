@@ -1,28 +1,22 @@
 import os
 import time
-from src.editProfile_page import editProfile
+import sqlite3
+from src.editProfile_page import editProfile  
 
 
-profile = {
-    "username": "default_user",
-    "profile_name": "Default Name",
-    "password": "default_password",
-    "address": "default_address"
-}
+db_path = "./database/data.db"
 
-
+"""Clears the terminal screen."""
 def clear_screen():
-    if os.name == 'nt':
+    if os.name == 'nt':  # For Windows
         os.system('cls')
-    else:
+    else:  # For macOS/Linux
         os.system('clear')
 
-<<<<<<< Updated upstream
-=======
 try:
-    user_data = sqlite3.connect(db_path)  # Connect to the database
+    user_data = sqlite3.connect(db_path)  
 
-except sqlite3.Error as e:
+except sqlite3.Error as e: #error handling will print a message when database is not found instead crashing the entire program
     print(f"Database connection error: {e}")
     exit(1)
 
@@ -89,42 +83,9 @@ def display_profile(profile):
 
     except KeyError as error:
         print(f"Error displaying profile: Missing {error}")
->>>>>>> Stashed changes
 
-def display_profile():
-    print("Accessing your profile...")
-    print()
 
-    print("=" * 40)
-    print(f"Username: {profile['username']}")
-    print(f"Name: {profile['profile_name']}")
-    print(f"Address: {profile['address']}")
-    print(f"Password: {profile['password']}")
-    print(f"Order History: 5 orders")
-    print("=" * 40)
 
-<<<<<<< Updated upstream
-def profile_page():
-    while True:
-        
-        print("\nProfile Page:")
-        print("1. Display Profile")
-        print("2. Edit Profile")
-        print("3. Exit Profile Page")
-
-        profile_choice = input("\nEnter your choice (1-3): ")
-        clear_screen()
-        
-
-        if profile_choice == "1":
-            display_profile()
-        elif profile_choice == "2":
-            editProfile(profile)  # Pass the shared profile dictionary
-        elif profile_choice == "3":
-            print("Exiting Profile Page...")
-            from home_page import homepage
-            homepage()
-=======
 def profile_page(username):
     profile = fetch_user_data(username)
 
@@ -163,12 +124,8 @@ def profile_page(username):
                 home(username)
             except ImportError:
                 print("Homepage functionality is unavailable.")
->>>>>>> Stashed changes
             break
+
         else:
-<<<<<<< Updated upstream
-            print("ERROR! TRY AGAIN.\n")
-=======
             print("Invalid choice! Please try again.")
             time.sleep(1)
->>>>>>> Stashed changes

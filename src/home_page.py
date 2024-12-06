@@ -1,29 +1,17 @@
-# In home_page.py
 from src.profile_page import profile_page
 from src.category_page import category_page
 from src.cart_page import view_cart
-import os
+import os 
 
-<<<<<<< Updated upstream
-
-def clear_screen():
-=======
-def clear_screen():  # Clears screen
->>>>>>> Stashed changes
+def clear_screen(): 
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
-# home_page.py
-
-<<<<<<< Updated upstream
-def homepage():
-=======
-def home(username):  # Accept `username` as a parameter
->>>>>>> Stashed changes
+def home(username):  
     while True:
-        clear_screen()  # Clears the screen before showing the menu
+        clear_screen() 
         print("=" * 40)
         print()
         print("SELECT(1-5):")
@@ -44,7 +32,7 @@ def home(username):  # Accept `username` as a parameter
 
         if choice == "1":
             clear_screen()
-            profile_page(username)  # Pass `username` to `profile_page()`
+            profile_page(username)
             input("\nPress Enter to return")
 
         elif choice == "2":
