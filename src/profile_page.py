@@ -15,19 +15,23 @@ def clear_screen():
 
 try:
     user_data = sqlite3.connect(db_path)  # Connect to the database
+
 except sqlite3.Error as e:
     print(f"Database connection error: {e}")
     exit(1)
 
 
-"""Verify if the provided username and password exist in the database."""
-def verify_user(username, password):
+"""Verify if the provided username exist in the database."""
+def verify_user(username):
+
     try:
         cursor = user_data.cursor()
-        query = "SELECT * FROM User WHERE username = ? AND password = ?"
-        cursor.execute(query, (username, password))
+        
+        query = "SELECT * FROM User WHERE username = ? "
+        cursor.execute(query, (username))
         result = cursor.fetchone()
         return result is not None
+    
     except sqlite3.Error as e:
         print(f"Database error: {e}")
         return False
@@ -67,7 +71,9 @@ def display_profile(profile):
     try:
 
         print("Accessing your profile...")
+
         time.sleep(1)
+
         print("=" * 40)
         print(f"Username: {profile['username']}")
         print(f"Name: {profile['profile_name']}")
@@ -93,18 +99,29 @@ def profile_page():
         return
 
     while True:
+
         display_profile(profile)
+
         print("1. Edit Profile")
-        print("2. Exit Profile Page")
+        print("2. Order History")
+        print("3. Exit Profile Page")
+
         profile_choice = input("\nEnter your choice (1-2): ").strip()
         clear_screen()
 
         if profile_choice == "1":
             editProfile(profile)  # Call the edit profile function
-        elif profile_choice == "2":
+
+        elif order_choice == "2":
+            from src.order_history import order_choice  # Ensure the `home` function exists
+            order_choice()
+            break
+
+        elif profile_choice == "3":
             print("Exiting Profile Page...")
             from src.home_page import home  # Ensure the `home` function exists
             home()
             break
+
         else:
             print("Invalid choice! Please try again.\n")
