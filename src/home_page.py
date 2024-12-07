@@ -4,6 +4,8 @@ from src.cart_page import view_cart
 from src.order_history import order_history
 import sqlite3
 import os 
+import time
+import sys
 
 
 def clear_screen(): #clears screen
@@ -45,34 +47,30 @@ def home(user_id): # main function of the homepage
         print()
         print()
 
-        print("Press Enter to return")
         choice = input("Enter your choice (1-5): ").strip()
         print()
 
         if choice == "1":
             clear_screen()
             profile_page(user_id) # TODO insert user_id when done linking user_id in profile page 
-            input("\nPress Enter to return")
 
         elif choice == "2":
             clear_screen()
             category_page()
-            input("\nPress Enter to return")
 
         elif choice == "3":
             clear_screen()
             view_cart() # TODO insert user_id when done linking user_id in cart page 
-            input("\nPress Enter to return")
 
         elif choice == "4":
             clear_screen()
             order_history() # TODO insert user_id when done linking user_id in order history page 
-            input("\nPress Enter to return")
 
         elif choice == "5":
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
-            break
+            time.sleep(1)
+            sys.exit()
 
         else:
             clear_screen()

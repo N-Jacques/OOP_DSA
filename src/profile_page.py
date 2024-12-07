@@ -3,30 +3,18 @@ import time
 import sqlite3
 from src.editProfile_page import editProfile  
 
-
 db_path = "./database/data.db"
+user_data = sqlite3.connect(db_path)  
 
-"""Clears the terminal screen."""
-def clear_screen():
+def clear_screen(): #Clears the terminal screen.
     if os.name == 'nt':  # For Windows
         os.system('cls')
     else:  # For macOS/Linux
         os.system('clear')
 
-try:
-    user_data = sqlite3.connect(db_path)  
-
-except sqlite3.Error as e: #error handling will print a message when database is not found instead crashing the entire program
-    print(f"Database connection error: {e}")
-    exit(1)
-
-
-"""Verify if the provided username exist in the database."""
-def verify_user(user_id):
-
+def verify_user(user_id):#Verify if the provided username exist in the database.
     try:
         cursor = user_data.cursor()
-        
         query = "SELECT * FROM User WHERE user_id = ?"
         cursor.execute(query, (user_id))
         result = cursor.fetchone()
@@ -36,17 +24,13 @@ def verify_user(user_id):
         print(f"Database error: {e}")
         return False
 
-
 def fetch_user_data(user_id):
     try:
         cursor = user_data.cursor()
-        # Query to retrieve user information
-        cursor.execute(
+        cursor.execute( # Query to retrieve user information
             "SELECT user_id, username, first_name, last_name, password, address_id, phone_number FROM user WHERE user_id = ?", (user_id,)
-        )
-        
+        )  
         user = cursor.fetchone()  # Fetch row
-
         if user:
             return {
                 "user_id": user[0],  # Include user_id here
@@ -55,32 +39,22 @@ def fetch_user_data(user_id):
                 "password": user[4],
                 "address_id": user[5],
                 "phone_number": user[6],
-            }
-        
+            }      
         else:
             print("User not found in the database.")
             time.sleep(2)
             clear_screen()
-            return None
-        
+            return None       
+    except sqlite3.Error as error:
+        print(f"Database error: {error}. Loading default profile.")
+        return None      
     except sqlite3.Error as error:
         print(f"Database error: {error}. Loading default profile.")
         return None
 
-        
-    except sqlite3.Error as error:
-        print(f"Database error: {error}. Loading default profile.")
-        return None
-
-"""Displays user profile information."""
-def display_profile(user_id):
-
-    try:
-
+def display_profile(user_id):#Displays user profile information.
         print("Accessing your profile...")
-
         time.sleep(1)
-
         print("=" * 40)
         print(f"Username: {user_id['username']}")
         print(f"Name: {user_id['profile_name']}")
@@ -89,23 +63,12 @@ def display_profile(user_id):
         print(f"Phone number: {user_id['phone_number']}")
         print("=" * 40)
 
-    except KeyError as error:
-        print(f"Error displaying profile: Missing {error}")
-
-
-
 def profile_page(user_id):
     profile = fetch_user_data(user_id)  # Fetch user data using the ID
-
-    if not profile:
-        print("Profile not found. Returning to the homepage.")
-        time.sleep(2)
-        return
 
     while True:
         clear_screen()
         display_profile(profile)
-
         print("1. Edit Profile")
         print("2. Order History")
         print("3. Exit Profile Page")
@@ -118,20 +81,14 @@ def profile_page(user_id):
             profile = fetch_user_data(user_id)  # Reload profile after edits
 
         elif profile_choice == "2":
-            try:
-                from src.order_history import order_choice
-                order_choice()
-            except ImportError:
-                print("Order history functionality is unavailable.")
+            from src.order_history import order_choice
+            order_choice()
             time.sleep(1)
 
         elif profile_choice == "3":
             print("Exiting Profile Page...")
-            try:
-                from src.home_page import home
-                home(user_id)  # Pass the integer user_id
-            except ImportError:
-                print("Homepage functionality is unavailable.")
+            from src.home_page import home
+            home(user_id)  # Pass the integer user_id
             break
 
         else:
