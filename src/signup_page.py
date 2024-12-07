@@ -70,71 +70,52 @@ def signup():
                 else:
                     break  # Valid input and username is available
                     
-            signup_pass = getpass.getpass("Enter Password: ")
-            if signup_pass.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
-            
-            signup_phone = input("Enter Phone number (09xxxxxxxxx): ")
-            if signup_phone.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
-            
-            print("\nEnter your Address Details below: ")
-            
-            signup_street = input("Enter Street (Required): ")
-            if signup_street.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
+            while True:
+                signup_pass = getpass.getpass("Enter Password: ")
+                if signup_pass.lower() == '/':
+                    print("Returning to Main Menu...")
+                    time.sleep(1.5)
+                    return
+                if not signup_pass:  # Check if the input is blank
+                    print(Fore.RED + Style.BRIGHT + "Error: Password cannot be blank.\n")
+                else:
+                    break  # Valid input
+        
+            while True:
+                signup_phone = input("Enter Phone number (09xxxxxxxxx): ")
+                if signup_phone.lower() == '/':
+                    print("Returning to Main Menu...")
+                    time.sleep(1.5)
+                    return
+                if not signup_phone:  # Check if the input is blank
+                    print(Fore.RED + Style.BRIGHT + "Error: Phone number cannot be blank.\n")
+                else:
+                    break  # Valid input
 
-            signup_house = input("Enter House No. (Required): ")
-            if signup_house.lower() == '/':
+            signup_address = input("Enter your address (ex. 123 Tigasin St. Tondo, Manila): ")
+            if signup_address.lower() == '/':
                 print("Returning to Main Menu...")
                 time.sleep(1.5)
                 return
             
-            signup_room = input("Enter Room No. (Leave empty if not applicable): ")
-            if signup_room.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
-            
-            signup_city = input("Enter City (Required): ")
-            if signup_city.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
-            
-            signup_region = input("Enter Region (Leave empty if not applicable): ")
-            if signup_region.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
-            
-            signup_zip = input("Enter Zip Code (Leave empty if not applicable): ")
-            if signup_zip.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
+            while True:
+                signup_address = input("Enter your address (ex. 123 Tigasin St. Tondo, Manila): ")
+                if signup_address.lower() == '/':
+                    print("Returning to Main Menu...")
+                    time.sleep(1.5)
+                    return
+                if not signup_address:  # Check if the input is blank
+                    print(Fore.RED + Style.BRIGHT + "Error: Address cannot be blank.\n")
+                else:
+                    break  # Valid input
         
             # Insert user details into the User table
             cursor = user_data.cursor()
             insert_user_query = """
-            INSERT INTO User (first_name, last_name, username, password, phone_number) 
+            INSERT INTO User (first_name, last_name, username, password, phone_number, address) 
             VALUES (?, ?, ?, ?, ?)
             """
-            cursor.execute(insert_user_query, (signup_fname, signup_lname, signup_user, signup_pass, signup_phone))
-            user_data.commit()
-
-            # Insert address into the Address table
-            insert_address_query = """
-            INSERT INTO Address (street_name, house_number, room_number, city, region, zip_code) 
-            VALUES (?, ?, ?, ?, ?, ?)
-            """
-            cursor.execute(insert_address_query, (signup_street, signup_house, signup_room or None, signup_city, signup_region or None, signup_zip or None))
+            cursor.execute(insert_user_query, (signup_fname, signup_lname, signup_user, signup_pass, signup_phone, signup_address))
             user_data.commit()
 
             print("\nSign up successful! Please log in.")
