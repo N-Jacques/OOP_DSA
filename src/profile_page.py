@@ -25,10 +25,9 @@ def verify_user(user_id):#Verify if the provided username exist in the database.
         return False
 
 def fetch_user_data(user_id):
-    try:
         cursor = user_data.cursor()
         cursor.execute( # Query to retrieve user information
-            "SELECT user_id, username, first_name, last_name, password, address_id, phone_number FROM user WHERE user_id = ?", (user_id,)
+            "SELECT user_id, username, first_name, last_name, password, address, phone_number FROM user WHERE user_id = ?", (user_id,)
         )  
         user = cursor.fetchone()  # Fetch row
         if user:
@@ -37,7 +36,7 @@ def fetch_user_data(user_id):
                 "username": user[1],
                 "profile_name": f"{user[2]} {user[3]}",  # Combine first_name and last_name
                 "password": user[4],
-                "address_id": user[5],
+                "address": user[5],
                 "phone_number": user[6],
             }      
         else:
@@ -45,12 +44,6 @@ def fetch_user_data(user_id):
             time.sleep(2)
             clear_screen()
             return None       
-    except sqlite3.Error as error:
-        print(f"Database error: {error}. Loading default profile.")
-        return None      
-    except sqlite3.Error as error:
-        print(f"Database error: {error}. Loading default profile.")
-        return None
 
 def display_profile(user_id):#Displays user profile information.
         print("Accessing your profile...")
@@ -59,7 +52,7 @@ def display_profile(user_id):#Displays user profile information.
         print(f"Username: {user_id['username']}")
         print(f"Name: {user_id['profile_name']}")
         print(f"Password: {user_id['password']}")
-        print(f"Address ID: {user_id['address_id']}")
+        print(f"Address: {user_id['address']}")
         print(f"Phone number: {user_id['phone_number']}")
         print("=" * 40)
 
@@ -82,7 +75,7 @@ def profile_page(user_id):
 
         elif profile_choice == "2":
             from src.order_history import order_choice
-            order_choice()
+            order_choice(user_id)
             time.sleep(1)
 
         elif profile_choice == "3":
