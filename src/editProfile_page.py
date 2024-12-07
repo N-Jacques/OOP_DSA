@@ -64,9 +64,9 @@ def editProfile(user_profile):
 
             elif choice == "4":
                 clear_screen()
-                new_address_id = input("\nEnter new address ID: ").strip()
-                cursor.execute("UPDATE user SET address_id = ? WHERE user_id = ?", (new_address_id, user_profile["user_id"]))  
-                user_profile["address_id"] = new_address_id  
+                new_address = input("\nEnter new address : ").strip()
+                cursor.execute("UPDATE user SET address = ? WHERE user_id = ?", (new_address, user_profile["user_id"]))  
+                user_profile["address_id"] = new_address 
                 user_data.commit()
                 print("Address updated successfully!\n")
                 time.sleep(0.5)
