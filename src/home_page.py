@@ -2,6 +2,8 @@ from src.profile_page import profile_page
 from src.category_page import category_page
 from src.cart_page import view_cart
 from src.order_history import order_history
+from colorama import Fore, Style, init
+
 import sqlite3
 import os 
 import time
@@ -28,11 +30,24 @@ def home(user_id): # main function of the homepage
 
     cursor.execute(query, (user_id,))
     result = cursor.fetchone()  # Fetch the result
-    
+
     
     while True:
         clear_screen() 
 
+        # header of home
+        print(Fore.GREEN + "=" * 49)
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "██╗  ██╗ ██████╗ ███╗   ███╗███████╗")
+        print(Fore.YELLOW + Style.BRIGHT + "██║  ██║██╔═══██╗████╗ ████║██╔════╝")
+        print(Fore.YELLOW + Style.BRIGHT + "███████║██║   ██║██╔████╔██║█████╗  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██╔══██║██║   ██║██║╚██╔╝██║██╔══╝  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗")
+        print(Fore.YELLOW + Style.BRIGHT + "╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝")
+        print("")
+        print(Fore.GREEN + "=" * 49)
+        print("")
+    
         print("=" * 40)
         print()
         print("SELECT(1-3):")
@@ -65,7 +80,7 @@ def home(user_id): # main function of the homepage
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
             time.sleep(1)
-            sys.exit()
+            return
 
         else:
             clear_screen()
