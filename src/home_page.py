@@ -1,19 +1,38 @@
 from src.profile_page import profile_page
 from src.category_page import category_page
 from src.cart_page import view_cart
-import os
+from src.order_history import order_history
+import sqlite3
+import os 
+import time
+import sys
 
 
-def clear_screen():
+def clear_screen(): #clears screen
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
 
-def homepage():
+def home(user_id): # main function of the homepage
+
+    # Link database
+    db_path = "./database/data.db"  # Correct path to the database file
+    user_data = sqlite3.connect(db_path)  # Establish a new connection to the database
+
+
+    # Access the database
+    cursor = user_data.cursor()
+    query = "SELECT first_name FROM User WHERE user_id = ?" # get first name from database
+
+    cursor.execute(query, (user_id,))
+    result = cursor.fetchone()  # Fetch the result
+    
+    
     while True:
-        clear_screen()  # Clears the screen before showing the menu
+        clear_screen() 
+
         print("=" * 40)
         print()
         print("SELECT(1-3):")
@@ -28,34 +47,30 @@ def homepage():
         print()
         print()
 
-        print("Press Enter to return")
         choice = input("Enter your choice (1-5): ").strip()
         print()
 
         if choice == "1":
             clear_screen()
-            profile_page()
-            input("\nPress Enter to return")
+            profile_page(user_id) # TODO insert user_id when done linking user_id in profile page 
 
         elif choice == "2":
             clear_screen()
             category_page()
-            input("\nPress Enter to return")
 
         elif choice == "3":
             clear_screen()
-            view_cart()
-            input("\nPress Enter to return")
+            view_cart() # TODO insert user_id when done linking user_id in cart page 
 
         elif choice == "4":
             clear_screen()
-            category_page()
-            input("\nPress Enter to return")
+            order_history() # TODO insert user_id when done linking user_id in order history page 
 
         elif choice == "5":
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
-            break
+            time.sleep(1)
+            sys.exit()
 
         else:
             clear_screen()
