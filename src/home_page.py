@@ -40,14 +40,13 @@ def home(user_id): # main function of the homepage
         print("1. PROFILE")
         print("2. VIEW PRODUCTS")
         print("3. VIEW CART")
-        print("4. VIEW ORDER HISTORY")
-        print("5. LOG OUT")
+        print("4. LOG OUT")
         print("=" * 40)
 
         print()
         print()
 
-        choice = input("Enter your choice (1-5): ").strip()
+        choice = input("Enter your choice (1-4): ").strip()
         print()
 
         if choice == "1":
@@ -60,13 +59,9 @@ def home(user_id): # main function of the homepage
 
         elif choice == "3":
             clear_screen()
-            view_cart() # TODO insert user_id when done linking user_id in cart page 
+            view_cart(user_id) # TODO insert user_id when done linking user_id in cart page 
 
         elif choice == "4":
-            clear_screen()
-            order_history() # TODO insert user_id when done linking user_id in order history page 
-
-        elif choice == "5":
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
             time.sleep(1)
