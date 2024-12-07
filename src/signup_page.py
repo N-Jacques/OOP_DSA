@@ -91,12 +91,6 @@ def signup():
                     print(Fore.RED + Style.BRIGHT + "Error: Phone number cannot be blank.\n")
                 else:
                     break  # Valid input
-
-            signup_address = input("Enter your address (ex. 123 Tigasin St. Tondo, Manila): ")
-            if signup_address.lower() == '/':
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
             
             while True:
                 signup_address = input("Enter your address (ex. 123 Tigasin St. Tondo, Manila): ")
@@ -113,7 +107,7 @@ def signup():
             cursor = user_data.cursor()
             insert_user_query = """
             INSERT INTO User (first_name, last_name, username, password, phone_number, address) 
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?)
             """
             cursor.execute(insert_user_query, (signup_fname, signup_lname, signup_user, signup_pass, signup_phone, signup_address))
             user_data.commit()
