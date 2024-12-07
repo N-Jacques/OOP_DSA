@@ -48,7 +48,6 @@ def home(user_id): # main function of the homepage
         print(Fore.GREEN + "=" * 49)
         print("")
     
-        print("=" * 40)
         print()
         print("SELECT(1-3):")
         print()
@@ -56,7 +55,7 @@ def home(user_id): # main function of the homepage
         print("2. VIEW PRODUCTS")
         print("3. VIEW CART")
         print("4. LOG OUT")
-        print("=" * 40)
+        print("=" * 49)
 
         print()
         print()

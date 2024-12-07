@@ -21,15 +21,15 @@ def login():
     # Print the improved banner with color and ASCII art for "Login"
     print(Fore.GREEN + "=" * 39)
     print("")
-    print(Fore.YELLOW + "██╗      ██████╗  ██████╗ ██╗███╗   ██╗")
-    print(Fore.YELLOW + "██║     ██╔═══██╗██╔════╝ ██║████╗  ██║")
-    print(Fore.YELLOW + "██║     ██║   ██║██║  ███╗██║██╔██╗ ██║")
-    print(Fore.YELLOW + "██║     ██║   ██║██║   ██║██║██║╚██╗██║")
-    print(Fore.YELLOW + "███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║")
-    print(Fore.YELLOW + "╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝")
+    print(Fore.YELLOW + Style.BRIGHT + "██╗      ██████╗  ██████╗ ██╗███╗   ██╗")
+    print(Fore.YELLOW + Style.BRIGHT + "██║     ██╔═══██╗██╔════╝ ██║████╗  ██║")
+    print(Fore.YELLOW + Style.BRIGHT + "██║     ██║   ██║██║  ███╗██║██╔██╗ ██║")
+    print(Fore.YELLOW + Style.BRIGHT + "██║     ██║   ██║██║   ██║██║██║╚██╗██║")
+    print(Fore.YELLOW + Style.BRIGHT + "███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║")
+    print(Fore.YELLOW + Style.BRIGHT + "╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝")
     print("")
     print(Fore.GREEN + "=" * 39)
-    print("\n" + Style.BRIGHT + "Type '/' at any time to go back to the main menu.\n")
+    print("\n" + Style.BRIGHT + "Type '/' at any time to go back to startup.\n")
 
     try:
         while True:

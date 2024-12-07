@@ -148,6 +148,19 @@ def editProfile(user_profile):
 
             elif choice == "5":
                 clear_screen()
+                
+                # banner for edit phone number
+                print(Fore.GREEN + "=" * 200)
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╗ ██╗████████╗    ██████╗ ██╗  ██╗ ██████╗ ███╗   ██╗███████╗    ███╗   ██╗██╗   ██╗███╗   ███╗██████╗ ███████╗██████╗ ")
+                print(Fore.YELLOW + Style.BRIGHT + "██╔════╝██╔══██╗██║╚══██╔══╝    ██╔══██╗██║  ██║██╔═══██╗████╗  ██║██╔════╝    ████╗  ██║██║   ██║████╗ ████║██╔══██╗██╔════╝██╔══██╗")
+                print(Fore.YELLOW + Style.BRIGHT + "█████╗  ██║  ██║██║   ██║       ██████╔╝███████║██║   ██║██╔██╗ ██║█████╗      ██╔██╗ ██║██║   ██║██╔████╔██║██████╔╝█████╗  ██████╔╝")
+                print(Fore.YELLOW + Style.BRIGHT + "██╔══╝  ██║  ██║██║   ██║       ██╔═══╝ ██╔══██║██║   ██║██║╚██╗██║██╔══╝      ██║╚██╗██║██║   ██║██║╚██╔╝██║██╔══██╗██╔══╝  ██╔══██╗")
+                print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╔╝██║   ██║       ██║     ██║  ██║╚██████╔╝██║ ╚████║███████╗    ██║ ╚████║╚██████╔╝██║ ╚═╝ ██║██████╔╝███████╗██║  ██║")
+                print(Fore.YELLOW + Style.BRIGHT + "╚══════╝╚═════╝ ╚═╝   ╚═╝       ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝    ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝")
+                print("")
+                print(Fore.GREEN + "=" * 200)
+
                 new_phone_number = input("\nEnter new phone number: ").strip() 
                 cursor.execute("UPDATE user SET phone_number = ? WHERE user_id = ?", (new_phone_number, user_profile["user_id"]))  
                 user_profile["phone_number"] = new_phone_number  

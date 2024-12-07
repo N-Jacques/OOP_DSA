@@ -20,7 +20,7 @@ def signup():
     print("")
     print(Fore.GREEN + "=" * 49)
     print("")
-    print("Type '/' at any time to go back to the main menu.\n")
+    print("Type '/' at any time to go back to startup.\n")
 
     cursor = None  # Initialize cursor to None to avoid reference error in the finally block
     
