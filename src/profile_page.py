@@ -27,7 +27,7 @@ def verify_user(user_id):#Verify if the provided username exist in the database.
 def fetch_user_data(user_id):
         cursor = user_data.cursor()
         cursor.execute( # Query to retrieve user information
-            "SELECT user_id, username, first_name, last_name, password, address_id, phone_number FROM user WHERE user_id = ?", (user_id,)
+            "SELECT user_id, username, first_name, last_name, password, address, phone_number FROM user WHERE user_id = ?", (user_id,)
         )  
         user = cursor.fetchone()  # Fetch row
         if user:
@@ -36,7 +36,7 @@ def fetch_user_data(user_id):
                 "username": user[1],
                 "profile_name": f"{user[2]} {user[3]}",  # Combine first_name and last_name
                 "password": user[4],
-                "address_id": user[5],
+                "address": user[5],
                 "phone_number": user[6],
             }      
         else:
@@ -52,7 +52,7 @@ def display_profile(user_id):#Displays user profile information.
         print(f"Username: {user_id['username']}")
         print(f"Name: {user_id['profile_name']}")
         print(f"Password: {user_id['password']}")
-        print(f"Address ID: {user_id['address_id']}")
+        print(f"Address: {user_id['address']}")
         print(f"Phone number: {user_id['phone_number']}")
         print("=" * 40)
 
