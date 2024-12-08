@@ -1,7 +1,7 @@
 import time
 import os
 import sqlite3
-
+import sys
 from colorama import Fore, Style, init
 
 # Path to the SQLite database file
@@ -37,6 +37,7 @@ def editProfile(user_profile):
         print("4. Edit Address")
         print("5. Edit Phone Number")
         print("6. Exit Edit Options")
+        print("7. Log out")
 
         choice = input("\nEnter your choice (1-6): ").strip()
 
@@ -174,6 +175,13 @@ def editProfile(user_profile):
                 print("Exiting Edit Options...\n")
                 from src.profile_page import profile_page
                 break
+
+            elif choice =="7":
+                from src.startup_page import startup
+                clear_screen()
+                print("\nThank you for shopping with us! Logging out")
+                time.sleep(1)
+                startup()
 
             else:
                 print("Invalid choice. Please try again.")

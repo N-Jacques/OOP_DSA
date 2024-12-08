@@ -43,9 +43,11 @@ def order_choice(user_id):
             profile_page(user_id)  
 
         elif user_choice == "2":
-            print("Logging out...")
-            time.sleep(0.5)
-            sys.exit()
+             from src.startup_page import startup
+             clear_screen()
+             print("\nThank you for shopping with us! Logging out")
+             time.sleep(1)
+             startup()
 
         else:
             print("Invalid choice! Please try again.\n")
