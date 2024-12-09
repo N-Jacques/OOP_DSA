@@ -24,19 +24,16 @@ def get_product_details(product_id: str) -> Optional[Dict[str, str]]:
             
             # Fetch all available color variants for the product
             cursor.execute("""
-                SELECT p.category, p.product_name, p.short_description, 
-                       GROUP_CONCAT(pc.color, ', ') as colors,
-                       pc.price, pc.stock
-                FROM product p
-                JOIN product_color pc ON p.product_id = pc.product_id
-                WHERE p.product_id = ?
-                GROUP BY p.product_id
-            """, (product_id,))
+                SELECT p.category, p.product_name, p.short_description, GROUP_CONCAT(pc.color, ', ') as colors, pc.price, pc.stock
+                FROM product p JOIN product_color pc ON p.product_id = pc.product_id 
+                           WHERE p.product_id = ? 
+                           GROUP BY p.product_id""", (product_id,))
             
             product_details = cursor.fetchone()
 
             if product_details:
                 return {
+                    "category": product_details [0],
                     "product_name": product_details[1],
                     "short_description": product_details[2],
                     "colors": product_details[3],
