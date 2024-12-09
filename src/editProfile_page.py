@@ -22,14 +22,12 @@ def delete_user(cursor, user_id, connection):
             
             cursor.execute("DELETE FROM orders WHERE user_id = ?", (user_id,))
             cursor.execute("DELETE FROM cart WHERE user_id = ?", (user_id,))
-            cursor.execute("DELETE FROM address WHERE address IN (SELECT address FROM user WHERE user_id = ?)", (user_id,))
             cursor.execute("DELETE FROM user WHERE user_id = ?", (user_id,))
 
             # confirm
             connection.commit()
             print(Fore.RED + "\nYour account has been successfully deleted. Goodbye!")
             time.sleep(2)
-
             
             from src.startup_page import startup
             startup()
@@ -41,7 +39,6 @@ def delete_user(cursor, user_id, connection):
         connection.rollback()
     finally:
         clear_screen()
-
 
 def editProfile(user_profile):
     """Allows the user to edit their profile and saves changes to the database."""
@@ -67,16 +64,15 @@ def editProfile(user_profile):
         print("5. Edit Phone Number")
         print("6. Delete your Account")
         print("7. Exit Edit Options")
-        print("8. Log out")
 
-        choice = input("\nEnter your choice (1-6): ").strip()
+        editProfile_choice = input("\nEnter your editProfile_choice (1-7): ").strip()
 
         try:
             # Connect to the database
             user_data = sqlite3.connect(db_path)
             cursor = user_data.cursor()
 
-            if choice == "1":
+            if editProfile_choice == "1":
                 clear_screen()
                 
                 # header of home
@@ -101,7 +97,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif choice == "2":
+            elif editProfile_choice == "2":
                 clear_screen()
 
                 # header of edit name
@@ -127,7 +123,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif choice == "3":
+            elif editProfile_choice == "3":
                 clear_screen()
 
                 # banner for edit password
@@ -152,7 +148,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif choice == "4":
+            elif editProfile_choice == "4":
                 clear_screen()
                 
                 # banner for edit address
@@ -177,7 +173,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif choice == "5":
+            elif editProfile_choice == "5":
                 clear_screen()
                 
                 # banner for edit phone number
@@ -200,7 +196,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif choice == "6":
+            elif editProfile_choice == "6":
                 # Delete user logic here
                 confirmation = input(
                     Fore.RED + "\nAre you sure you want to delete your account? (yes/no): ").strip().lower()
@@ -208,8 +204,22 @@ def editProfile(user_profile):
                     try:
                         cursor.execute("DELETE FROM orders WHERE user_id = ?", (user_profile["user_id"],))
                         cursor.execute("DELETE FROM cart WHERE user_id = ?", (user_profile["user_id"],))
-                        cursor.execute("DELETE FROM user WHERE user_id = ?", (user_profile["user_id"],))
+                        cursor.execute("DELETE FROM user WHERE user_id = ?", (user_profile["user_id"],)) 
+
                         user_data.commit()
+                        cursor.execute("UPDATE sqlite_sequence SET seq = (SELECT MAX(user_id) FROM user) WHERE name = 'user'")
+
+                        # Step 3: Execute VACUUM to rebuild and reset the database
+                        cursor.execute("VACUUM")
+            
+                        # Commit changes
+                        user_data.commit()
+                        
+                        cursor.execute("INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)", 
+                        ("New", "User", "newuser", "password"))
+                        cursor.execute("SELECT last_insert_rowid()")
+                        new_user_id = cursor.fetchone()[0]
+                        print(f"New user_id: {new_user_id}")
 
                         print(Fore.RED + "\nYour account has been successfully deleted. Goodbye!")
                         time.sleep(2)
@@ -226,21 +236,14 @@ def editProfile(user_profile):
                     time.sleep(1)
 
 
-            elif choice == "7":
+            elif editProfile_choice == "7":
                 clear_screen()
                 print("Exiting Edit Options...\n")
                 from src.profile_page import profile_page
                 break
 
-            elif choice =="8":
-                from src.startup_page import startup
-                clear_screen()
-                print("\nThank you for shopping with us! Logging out")
-                time.sleep(1)
-                startup()
-
             else:
-                print("Invalid choice. Please try again.")
+                print("Invalid editProfile_choice. Please try again.")
                 time.sleep(1)
                 clear_screen()
 
