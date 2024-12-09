@@ -73,7 +73,7 @@ def home(user_id): # main function of the homepage
 
         elif choice == "3":
             clear_screen()
-            view_cart(user_id) # TODO insert user_id when done linking user_id in cart page 
+            view_cart() # TODO insert user_id when done linking user_id in cart page 
 
         elif choice == "4":
             clear_screen()
