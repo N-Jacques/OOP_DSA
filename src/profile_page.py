@@ -1,6 +1,9 @@
 import os
 import time
 import sqlite3
+from colorama import Fore, Style, init
+import sys
+
 from src.editProfile_page import editProfile  
 
 db_path = "./database/data.db"
@@ -61,10 +64,25 @@ def profile_page(user_id):
 
     while True:
         clear_screen()
+
+        # header of home
+        print(Fore.GREEN + "=" * 49)
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "██████╗ ██████╗  ██████╗ ███████╗██╗██╗     ███████╗")
+        print(Fore.YELLOW + Style.BRIGHT + "██╔══██╗██╔══██╗██╔═══██╗██╔════╝██║██║     ██╔════╝")
+        print(Fore.YELLOW + Style.BRIGHT + "██████╔╝██████╔╝██║   ██║█████╗  ██║██║     █████╗  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██╔═══╝ ██╔══██╗██║   ██║██╔══╝  ██║██║     ██╔══╝  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████")
+        print(Fore.YELLOW + Style.BRIGHT + "╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝")
+        print("")
+        print(Fore.GREEN + "=" * 49)
+        print("")
+
         display_profile(profile)
         print("1. Edit Profile")
         print("2. Order History")
         print("3. Exit Profile Page")
+        print("4. Log out")
 
         profile_choice = input("\nEnter your choice (1-3): ").strip()
 
@@ -83,6 +101,10 @@ def profile_page(user_id):
             from src.home_page import home
             home(user_id)  # Pass the integer user_id
             break
+
+        elif profile_choice =="4":
+             from src.startup_page import startup
+             startup()
 
         else:
             print("Invalid choice! Please try again.")

@@ -2,6 +2,8 @@ from src.profile_page import profile_page
 from src.category_page import category_page
 from src.cart_page import view_cart
 from src.order_history import order_history
+from colorama import Fore, Style, init
+
 import sqlite3
 import os 
 import time
@@ -28,12 +30,24 @@ def home(user_id): # main function of the homepage
 
     cursor.execute(query, (user_id,))
     result = cursor.fetchone()  # Fetch the result
-    
+
     
     while True:
         clear_screen() 
 
-        print("=" * 40)
+        # header of home
+        print(Fore.GREEN + "=" * 49)
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "██╗  ██╗ ██████╗ ███╗   ███╗███████╗")
+        print(Fore.YELLOW + Style.BRIGHT + "██║  ██║██╔═══██╗████╗ ████║██╔════╝")
+        print(Fore.YELLOW + Style.BRIGHT + "███████║██║   ██║██╔████╔██║█████╗  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██╔══██║██║   ██║██║╚██╔╝██║██╔══╝  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗")
+        print(Fore.YELLOW + Style.BRIGHT + "╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝")
+        print("")
+        print(Fore.GREEN + "=" * 49)
+        print("")
+    
         print()
         print("SELECT(1-3):")
         print()
@@ -41,7 +55,7 @@ def home(user_id): # main function of the homepage
         print("2. VIEW PRODUCTS")
         print("3. VIEW CART")
         print("4. LOG OUT")
-        print("=" * 40)
+        print("=" * 49)
 
         print()
         print()
@@ -51,21 +65,21 @@ def home(user_id): # main function of the homepage
 
         if choice == "1":
             clear_screen()
-            profile_page(user_id) # TODO insert user_id when done linking user_id in profile page 
+            profile_page(user_id) 
 
         elif choice == "2":
-            clear_screen()
-            category_page()
+            clear_screen() 
+            category_page() # TODO insert user_id when done linking user_id in cart page 
 
         elif choice == "3":
             clear_screen()
-            view_cart(user_id) # TODO insert user_id when done linking user_id in cart page 
+            view_cart(user_id)  
 
         elif choice == "4":
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
             time.sleep(1)
-            sys.exit()
+            return
 
         else:
             clear_screen()
