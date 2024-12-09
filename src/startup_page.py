@@ -68,11 +68,11 @@ def startup(): #
         
             else:
                 print(Fore.RED + Style.BRIGHT +"Invalid choice. Please select a valid option.")
-                time.sleep(1)
+                time.sleep(0.5)
                 
 
         except ValueError:
             print(Fore.RED + Style.BRIGHT +"Invalid input. Please enter a number")
-            time.sleep(1)
+            time.sleep(0.5)
             
 
