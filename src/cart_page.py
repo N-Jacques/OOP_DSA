@@ -4,13 +4,12 @@ import time
 
 db_path = "./database/data.db"
 
-def clear_screen(): #clears screen
+def clear_screen():  # clears screen
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
-    # connect program to linked data 
 def view_cart(user_id):
     user_data = sqlite3.connect(db_path)
     cart_cursor = user_data.cursor()
@@ -19,13 +18,15 @@ def view_cart(user_id):
     query = "SELECT cart_id FROM Cart WHERE user_id = ?"
     cart_cursor.execute(query, (user_id,))
     cart = cart_cursor.fetchone()
-    
+
     if cart is None:
+        # Inform the user if no cart is found
         print("You don't have a cart yet.")
-        return "empty"  # User doesn't have a cart
-    
-    cart_id = cart[0]
-    
+        input("\nPress '/' to return to the menu.")  # Wait for user to press '/' to return
+        return  # Return to the calling function (e.g., home page)
+
+    cart_id = cart[0]  # Assign cart_id if cart exists
+
     while True:
         # Step 2: Retrieve the cart items with their details
         query = """
@@ -44,7 +45,7 @@ def view_cart(user_id):
 
         if not cart_items:
             print("Your cart is empty.")
-            return "empty"  # No items in the cart
+            return  # No items in the cart, exit
 
         # Step 3: Display the cart items in a table format
         total_cost = 0
@@ -90,7 +91,7 @@ def view_cart(user_id):
 # Function to change the quantity of a cart item
 def change_quantity(cart_id, item_id, new_quantity, cursor, connection):
     if new_quantity <= 0:
-        print("Quantity must be greater than zero. Use 'Remove an Item' option to delete an item.") 
+        print("Quantity must be greater than zero. Use 'Remove an Item' option to delete an item.")
         return
 
     # Fetch the item price to recalculate the total price
@@ -110,9 +111,6 @@ def change_quantity(cart_id, item_id, new_quantity, cursor, connection):
         cursor.execute(update_query, (new_quantity, total_price, item_id, cart_id))
         connection.commit()
         print(f"Quantity updated successfully for Item ID {item_id}.")
-        time.sleep(1.2)
-        clear_screen()
-        
     else:
         print("Item not found in the cart.")
 

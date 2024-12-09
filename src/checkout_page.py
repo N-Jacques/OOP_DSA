@@ -13,7 +13,7 @@ def fetch_cart_details(cart_id):
     user_data = sqlite3.connect(db_path)
     cursor = user_data.cursor()
 
-    # Fetch items in the cart
+# Fetch items in the cart
     query = """
     SELECT pc.product_name, pc.price, ci.quantity, (pc.price * ci.quantity) AS total_price
     FROM Cart_Items ci
@@ -23,7 +23,7 @@ def fetch_cart_details(cart_id):
     cursor.execute(query, (cart_id,))
     cart_items = cursor.fetchall()
 
-    # Calculate total cost
+# Calculate total cost
     total_cost = sum(item[3] for item in cart_items)
     
     return cart_items, total_cost
@@ -117,5 +117,3 @@ def generate_receipt(cart_items, total, discount, order_id, cart_id, address, or
     print(f"Total Paid: ₱{amount_paid:,.2f}")
     print("=" * 30)
     print("Thank you for shopping with us!")
-
-
