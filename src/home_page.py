@@ -65,15 +65,15 @@ def home(user_id): # main function of the homepage
 
         if choice == "1":
             clear_screen()
-            profile_page(user_id) # TODO insert user_id when done linking user_id in profile page 
+            profile_page(user_id) 
 
         elif choice == "2":
-            clear_screen()
-            category_page()
+            clear_screen() 
+            category_page() # TODO insert user_id when done linking user_id in cart page 
 
         elif choice == "3":
             clear_screen()
-            view_cart() # TODO insert user_id when done linking user_id in cart page 
+            view_cart(user_id)  
 
         elif choice == "4":
             clear_screen()

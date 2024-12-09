@@ -17,17 +17,18 @@ def startup(): #
         try:
             clear_screen()
 
-            print(Fore.GREEN + "="* 65)
+            print(Fore.GREEN + "="* 90)
             print()
-            print(Fore.YELLOW + Style.BRIGHT + "██╗  ██╗ ██████╗ ██╗      █████╗ ██████╗ ███████╗██╗     ███████╗")
-            print(Fore.YELLOW + Style.BRIGHT + "██║  ██║██╔═══██╗██║     ██╔══██╗██╔══██╗██╔════╝██║     ██╔════╝")
-            print(Fore.YELLOW + Style.BRIGHT + "███████║██║   ██║██║     ███████║██████╔╝█████╗  ██║     ███████╗")
-            print(Fore.YELLOW + Style.BRIGHT + "██╔══██║██║   ██║██║     ██╔══██║██╔══██╗██╔══╝  ██║     ╚════██║")
-            print(Fore.YELLOW + Style.BRIGHT + "██║  ██║╚██████╔╝███████╗██║  ██║██████╔╝███████╗███████╗███████║")
-            print(Fore.YELLOW + Style.BRIGHT + "╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝")
+            print(Fore.YELLOW + Style.BRIGHT + "██████╗ ███████╗███████╗████████╗    ███████╗██████╗ ██╗███████╗███╗   ██╗██████╗ ███████╗")
+            print(Fore.YELLOW + Style.BRIGHT + "██╔══██╗██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔══██╗██╔════╝")
+            print(Fore.YELLOW + Style.BRIGHT + "██████╔╝█████╗  ███████╗   ██║       █████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║  ██║███████╗")
+            print(Fore.YELLOW + Style.BRIGHT + "██╔══██╗██╔══╝  ╚════██║   ██║       ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║  ██║╚════██║")
+            print(Fore.YELLOW + Style.BRIGHT + "██████╔╝███████╗███████║   ██║       ██║     ██║  ██║██║███████╗██║ ╚████║██████╔╝███████║")
+            print(Fore.YELLOW + Style.BRIGHT + "╚═════╝ ╚══════╝╚══════╝   ╚═╝       ╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝")
+
             print()
-            print(Fore.WHITE + Style.BRIGHT + "\t\t\t   SHOPPING" + Style.RESET_ALL)
-            print(Fore.GREEN + "=" * 65 + "\n")
+            print(Fore.WHITE + Style.BRIGHT + "\t\t\t\t\tSHOPPING" + Style.RESET_ALL)
+            print(Fore.GREEN + "=" * 90 + "\n")
             print(Fore.WHITE + "To browse our products, Login or Sign up to get started.\n")
 
 

@@ -1,75 +1,96 @@
 # checkout_page.py
 
-import uuid
-from datetime import datetime
 
-# Static list of products (as dummy data)
-products = {
-    "T-shirt": 299.99,
-    "Gold Ring": 999.99,
-    "Rice Cooker": 1499.99,
-    "Shampoo": 199.99,
-    "Frying Pan": 599.99
-}
+from datetime import datetime
+import sqlite3
+import uuid
+
+db_path = "./database/data.db"
+
+# Function to fetch cart details
+def fetch_cart_details(cart_id):
+    """Fetch cart details including items and calculate total cost."""
+    user_data = sqlite3.connect(db_path)
+    cursor = user_data.cursor()
+
+# Fetch items in the cart
+    query = """
+    SELECT pc.product_name, pc.price, ci.quantity, (pc.price * ci.quantity) AS total_price
+    FROM Cart_Items ci
+    JOIN Product_Color pc ON ci.product_color_id = pc.product_color_id
+    WHERE ci.cart_id = ?
+    """
+    cursor.execute(query, (cart_id,))
+    cart_items = cursor.fetchall()
+
+# Calculate total cost
+    total_cost = sum(item[3] for item in cart_items)
+    
+    return cart_items, total_cost
+
+# Function to fetch user's address
+def fetch_user_address(user_id):
+    """Fetch the address of the user."""
+    user_data = sqlite3.connect(db_path)
+    cursor = user_data.cursor()
+
+    query = "SELECT address FROM user WHERE user_id = ?"
+    cursor.execute(query, (user_id,))
+    address = cursor.fetchone()
+
+    if address:
+        return address[0]
+    else:
+        return "Address not found. Please update your profile."
 
 # Function to display cart contents and calculate total cost
-def view_cart(cart):
+def view_cart(cart_items, total_cost):
     """Display the cart contents."""
-    if not cart:
+    if not cart_items:
         print("\nYour cart is empty.")
-        return 0
     else:
         print("\nYour Cart:")
-        total_cost = 0
-        for product, quantity in cart.items():
-            cost = products[product] * quantity
-            total_cost += cost
-            print(f"{product}: {quantity} x ₱{products[product]:,.2f} = ₱{cost:,.2f}")
+        for idx, item in enumerate(cart_items, start=1):
+            product_name, price, quantity, total_price = item
+            print(f"{idx}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
         print(f"Subtotal: ₱{total_cost:,.2f}")
-        return total_cost
-
-# Function to apply discounts based on the total cost
-def apply_discounts(total):
-    """Apply discounts based on total cost."""
-    discount = 0
-    if total >= 100000:
-        discount = total * 0.10
-        print(f"Discount applied: ₱{discount:,.2f} (10% off)")
-    elif total >= 50000:
-        discount = total * 0.05
-        print(f"Discount applied: ₱{discount:,.2f} (5% off)")
-    return discount
 
 # Function to handle the checkout process
-def checkout(cart):
+def checkout(user_id, cart_id):
     """Checkout and generate receipt."""
     print("\nCheckout:")
-    if not cart:
+    
+    # Fetch cart details
+    cart_items, total_cost = fetch_cart_details(cart_id)
+
+    if not cart_items:
         print("Your cart is empty. Add items before checking out.")
         return
 
     # View cart and calculate totals
-    total_cost = view_cart(cart)
-    discount = apply_discounts(total_cost)
-    final_total = total_cost - discount
+    view_cart(cart_items, total_cost)
 
-    # Generate unique IDs and other order details
-    order_id = str(uuid.uuid4())
-    cart_id = str(uuid.uuid4())
-    address_id = str(uuid.uuid4())
-    order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    order_status = "Pending"
-    amount_paid = final_total
+    # Fetch user address
+    address = fetch_user_address(user_id)
+    print(f"\nShipping Address: {address}")
 
-    print(f"Cart ID: {cart_id}")
-    print(f"Final Total: ₱{final_total:,.2f}")
+    # Add shipping fee
+    shipping_fee = 40.00
+    print(f"Shipping Fee: ₱{shipping_fee:,.2f}")
 
+    # Calculate final total
+    final_total = total_cost + shipping_fee
+    print(f"Total Due (after shipping): ₱{final_total:,.2f}")
+
+    # Confirm payment
     while True:
-        confirm = input("Proceed with payment? (yes/no): ").strip().lower()
+        confirm = input("\nProceed with payment? (yes/no): ").strip().lower()
         if confirm == "yes":
+            # Generate receipt
+            order_id = str(uuid.uuid4())[:8]  # Example order ID
+            order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             order_status = "Paid"
-            print("\nPayment successful! Here's your receipt:")
-            generate_receipt(cart, final_total, discount, order_id, cart_id, address_id, order_date, order_status, amount_paid)
+            generate_receipt(cart_items, total_cost, 0, order_id, cart_id, address, order_date, order_status, final_total)
             break
         elif confirm == "no":
             print("\nPayment canceled.")
@@ -78,7 +99,7 @@ def checkout(cart):
             print("Invalid input. Please type 'yes' or 'no'.")
 
 # Function to generate and display the receipt
-def generate_receipt(cart, total, discount, order_id, cart_id, address_id, order_date, order_status, amount_paid):
+def generate_receipt(cart_items, total, discount, order_id, cart_id, address, order_date, order_status, amount_paid):
     """Generate and display receipt after successful payment."""
     print("\nReceipt:")
     print("=" * 30)
@@ -86,10 +107,10 @@ def generate_receipt(cart, total, discount, order_id, cart_id, address_id, order
     print(f"Cart ID: {cart_id}")
     print(f"Order Date: {order_date}")
     print(f"Order Status: {order_status}")
-    print(f"Address ID: {address_id}")
-    for product, quantity in cart.items():
-        cost = products[product] * quantity
-        print(f"{product}: {quantity} x ₱{products[product]:,.2f} = ₱{cost:,.2f}")
+    print(f"Shipping Address: {address}")
+    for idx, item in enumerate(cart_items, start=1):
+        product_name, price, quantity, total_price = item
+        print(f"{idx}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
     print("-" * 30)
     print(f"Subtotal: ₱{total + discount:,.2f}")
     print(f"Discount: -₱{discount:,.2f}")

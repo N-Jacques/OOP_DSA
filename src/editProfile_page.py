@@ -13,6 +13,35 @@ def clear_screen():
     else:  # For macOS/Linux
         os.system('clear')
 
+def delete_user(cursor, user_id, connection):
+    """Delete the user and all related data from the database."""
+    try:
+        confirmation = input(
+            Fore.RED + "\nAre you sure you want to delete your account? (yes/no): ").strip().lower()
+        if confirmation == "yes":
+            
+            cursor.execute("DELETE FROM orders WHERE user_id = ?", (user_id,))
+            cursor.execute("DELETE FROM cart WHERE user_id = ?", (user_id,))
+            cursor.execute("DELETE FROM address WHERE address IN (SELECT address FROM user WHERE user_id = ?)", (user_id,))
+            cursor.execute("DELETE FROM user WHERE user_id = ?", (user_id,))
+
+            # confirm
+            connection.commit()
+            print(Fore.RED + "\nYour account has been successfully deleted. Goodbye!")
+            time.sleep(2)
+
+            
+            from src.startup_page import startup
+            startup()
+        else:
+            print(Fore.YELLOW + "\nAccount deletion canceled.")
+            time.sleep(1)
+    except sqlite3.Error as e:
+        print(Fore.RED + f"\nDatabase error: {e}")
+        connection.rollback()
+    finally:
+        clear_screen()
+
 
 def editProfile(user_profile):
     """Allows the user to edit their profile and saves changes to the database."""
@@ -36,8 +65,9 @@ def editProfile(user_profile):
         print("3. Edit Password")
         print("4. Edit Address")
         print("5. Edit Phone Number")
-        print("6. Exit Edit Options")
-        print("7. Log out")
+        print("6. Delete your Account")
+        print("7. Exit Edit Options")
+        print("8. Log out")
 
         choice = input("\nEnter your choice (1-6): ").strip()
 
@@ -171,12 +201,38 @@ def editProfile(user_profile):
                 clear_screen()
 
             elif choice == "6":
+                # Delete user logic here
+                confirmation = input(
+                    Fore.RED + "\nAre you sure you want to delete your account? (yes/no): ").strip().lower()
+                if confirmation == "yes":
+                    try:
+                        cursor.execute("DELETE FROM orders WHERE user_id = ?", (user_profile["user_id"],))
+                        cursor.execute("DELETE FROM cart WHERE user_id = ?", (user_profile["user_id"],))
+                        cursor.execute("DELETE FROM user WHERE user_id = ?", (user_profile["user_id"],))
+                        user_data.commit()
+
+                        print(Fore.RED + "\nYour account has been successfully deleted. Goodbye!")
+                        time.sleep(2)
+
+                        # Redirect to startup page after deletion
+                        from src.startup_page import startup
+                        startup()
+                        break  # Exit the loop after redirecting
+                    except sqlite3.Error as e:
+                        print(Fore.RED + f"\nDatabase error: {e}")
+                        user_data.rollback()
+                else:
+                    print(Fore.YELLOW + "\nAccount deletion canceled.")
+                    time.sleep(1)
+
+
+            elif choice == "7":
                 clear_screen()
                 print("Exiting Edit Options...\n")
                 from src.profile_page import profile_page
                 break
 
-            elif choice =="7":
+            elif choice =="8":
                 from src.startup_page import startup
                 clear_screen()
                 print("\nThank you for shopping with us! Logging out")
