@@ -1,55 +1,76 @@
 import os
 import time
 import sqlite3
-import sys
+from colorama import Fore, Style
 
-# Clears the terminal screen.
+db_path = "./database/data.db"
+
+
 def clear_screen():
+    """Clears the terminal screen."""
     if os.name == 'nt':  # For Windows
         os.system('cls')
     else:  # For macOS/Linux
         os.system('clear')
 
-def order_history():  # Display header
+
+def fetch_order_history(user_id):
+    """Fetch order history from the database for a given user."""
+    try:
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+        query = """SELECT o.order_date, p.product_name, o.quantity, o.status FROM orders 
+        JOIN products p ON o.product_id = p.product_id WHERE o.user_id = ? ORDER BY o.order_date DESC"""
+        cursor.execute(query, (user_id,))
+        orders = cursor.fetchall()
+        connection.close()
+        return orders
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return []
+
+
+def order_history(order_list):
+    """Display the order history table."""
+    if not order_list:
+        print("\nNo orders found.")
+        return
 
     print("-" * 57)
-    print(f"{'Date':<12} {'Item name':<20} {'Quantity':<8} {'Status':<12}")
+    print(f"{'Date':<12} {'Item Name':<20} {'Quantity':<8} {'Status':<12}")
     print("-" * 57)
-
-    
-    orders = [ # Sample order data
-        ("10/24/2023", "2 TB HDD KINGSTON", 1, "Delivered"),
-        ("07/30/2024", "Intel I5 7th Gen", 1, "Delivered"),
-        ("04/06/2024", "DDR4 16GB RAM 1333mhz", 2, "Delivered"),
-        ("08/30/2024", "500 GB SSD KINGSTON", 1, "Delivered"),
-    ]
-    
-    for order in orders:
+    for order in order_list:
         date, item_name, quantity, status = order
         print(f"{date:<12} {item_name:<20} {quantity:<8} {status:<12}")
     print("-" * 57)
 
-def order_choice(user_id): 
+
+def order_choice(user_id):
+    """Display order choices to the user."""
     while True:
         clear_screen()
-        order_history()
-        print("1. Exit Order History")
-        print("2. Log Out")
 
-        user_choice = input("\nEnter your choice (1-2): ").strip()
+        # Fetch and display order history
+        orders = fetch_order_history(user_id)
+        order_history(orders)
 
-        if user_choice == "1":
-            from src.profile_page import profile_page  
-            profile_page(user_id)  
+        print("\n1. Refresh Order History")
+        print("2. Exit Order History")
+        print("3. Log Out")
 
-        elif user_choice == "2":
-             from src.startup_page import startup
-             clear_screen()
-             print("\nThank you for shopping with us! Logging out")
-             time.sleep(1)
-             startup()
+        choice = input("\nEnter your choice (1-3): ").strip()
 
-        else:
-            print("Invalid choice! Please try again.\n")
+        if choice == "1":
+            continue
+        elif choice == "2":
+            print("\nExiting Order History...")
             time.sleep(1)
-
+            break
+        elif choice == "3":
+            from src.startup_page import startup
+            print("\nLogging out...")
+            time.sleep(1)
+            startup()
+        else:
+            print("Invalid choice! Please try again.")
+            time.sleep(1)
