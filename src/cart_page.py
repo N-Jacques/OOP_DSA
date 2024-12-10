@@ -199,6 +199,3 @@ def cart_actions(cart_id, user_id):
         view_cart(cart_items, total_cost)
         print("\nProceeding to checkout...")
         checkout(user_id, cart_id)
-
-# Simulate running the cart page with a user_id
-cart_page(1)  # Replace with actual user_id for testing
