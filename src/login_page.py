@@ -33,11 +33,16 @@ def login():
 
     try:
         while True:
-            login_user = input("Enter username: ")
-            if login_user.lower() == '/':  # if "/" is inputted, go back
-                print("Returning to Main Menu...")
-                time.sleep(1.5)
-                return
+            while True:
+                login_user = input("Enter your Username: ").strip()
+                if login_user.lower() == '/': # if "/" is inputted, go back
+                    print("Returning to Main Menu...")
+                    time.sleep(1.5)
+                    return
+                if not login_user:  # Check if the input is blank
+                    print(Fore.RED + Style.BRIGHT + "Error: Username cannot be blank.\n")
+                else:
+                    break  # Valid input
 
             # Get password securely
             login_pass = getpass.getpass("Enter password: ")  # Hide password when typing
