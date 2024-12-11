@@ -44,7 +44,7 @@ def editProfile(user_profile):
     """Allows the user to edit their profile and saves changes to the database."""
     while True:
         # header of home
-        print(Fore.GREEN + "=" * 49)
+        print(Fore.GREEN + Style.BRIGHT +"=" * 200)
         print("")
         print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╗ ██╗████████╗    ██████╗ ██████╗  ██████╗ ███████╗██╗██╗     ███████╗")
         print(Fore.YELLOW + Style.BRIGHT + "██╔════╝██╔══██╗██║╚══██╔══╝    ██╔══██╗██╔══██╗██╔═══██╗██╔════╝██║██║     ██╔════╝")
@@ -53,10 +53,13 @@ def editProfile(user_profile):
         print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╔╝██║   ██║       ██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████")
         print(Fore.YELLOW + Style.BRIGHT + "╚══════╝╚═════╝ ╚═╝   ╚═╝       ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝")
         print("")
-        print(Fore.GREEN + "=" * 49)
+        print(Fore.GREEN + Style.BRIGHT +"=" * 200)        
         print("")
 
+
+        print(Fore.GREEN + Style.BRIGHT +"=" * 200)
         print("\nEdit Profile Page:")
+        print(Fore.GREEN + Style.BRIGHT +"=" * 200)
         print("1. Edit Password")
         print("2. Edit Address")
         print("3. Edit Phone Number")
@@ -172,7 +175,7 @@ def editProfile(user_profile):
                         print(f"New user_id: {new_user_id}")
 
                         print(Fore.RED + "\nYour account has been successfully deleted. Goodbye!")
-                        time.sleep(2)
+                        time.sleep(1)
 
                         # Redirect to startup page after deletion
                         from src.startup_page import startup
@@ -195,7 +198,7 @@ def editProfile(user_profile):
 
             else:
                 print("Invalid editProfile_choice. Please try again.")
-                time.sleep(1)
+                time.sleep(0.5)
                 clear_screen()
 
         finally:

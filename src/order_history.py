@@ -40,9 +40,6 @@ def order_history(order_list):
         print("\nNo orders found.")
         return
 
-
-
-
     print()
     print(Fore.YELLOW + Style.BRIGHT + " ██████╗ ██████╗ ██████╗ ███████╗██████╗     ██╗  ██╗██╗███████╗████████╗ ██████╗ ██████╗ ██╗   ██╗ ")
     print(Fore.YELLOW + Style.BRIGHT + "██╔═══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗    ██║  ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝ ")

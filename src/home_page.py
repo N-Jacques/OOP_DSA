@@ -66,6 +66,7 @@ def home(user_id): # main function of the homepage
         if choice == "1":
             clear_screen()
             profile_page(user_id) 
+            time.sleep(0.5)
 
         elif choice == "2":
             clear_screen() 
