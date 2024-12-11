@@ -29,7 +29,7 @@ def verify_user(user_id):#Verify if the provided username exist in the database.
 
 def fetch_user_data(user_id):
         cursor = user_data.cursor()
-        cursor.execute( # Query to retrieve user information
+        cursor.execute( # Query to retrieve user information TODO add "password" when implenting hide pass
             "SELECT user_id, username, first_name, last_name, password, address, phone_number FROM user WHERE user_id = ?", (user_id,)
         )  
         user = cursor.fetchone()  # Fetch row
@@ -38,7 +38,7 @@ def fetch_user_data(user_id):
                 "user_id": user[0],  # Include user_id here
                 "username": user[1],
                 "profile_name": f"{user[2]} {user[3]}",  # Combine first_name and last_name
-                "password": user[4],
+                #"password": user[4], TODO remove comment logo when implenting count the char val of pass then convert to asterisk
                 "address": user[5],
                 "phone_number": user[6],
             }      
@@ -51,13 +51,13 @@ def fetch_user_data(user_id):
 def display_profile(user_id):#Displays user profile information.
         print("Accessing your profile...")
         time.sleep(1)
-        print("=" * 40)
+        print(Fore.GREEN + Style.BRIGHT +"=" * 40)
         print(f"Username: {user_id['username']}")
         print(f"Name: {user_id['profile_name']}")
-        print(f"Password: {user_id['password']}")
+        print("Password: **********")
         print(f"Address: {user_id['address']}")
         print(f"Phone number: {user_id['phone_number']}")
-        print("=" * 40)
+        print(Fore.GREEN + Style.BRIGHT +"=" * 40)
 
 def profile_page(user_id):
     profile = fetch_user_data(user_id)  # Fetch user data using the ID
@@ -66,25 +66,24 @@ def profile_page(user_id):
         clear_screen()
 
         # header of home
-        print(Fore.GREEN + "=" * 49)
+        print(Fore.GREEN + "=" * 60)
         print("")
         print(Fore.YELLOW + Style.BRIGHT + "██████╗ ██████╗  ██████╗ ███████╗██╗██╗     ███████╗")
         print(Fore.YELLOW + Style.BRIGHT + "██╔══██╗██╔══██╗██╔═══██╗██╔════╝██║██║     ██╔════╝")
         print(Fore.YELLOW + Style.BRIGHT + "██████╔╝██████╔╝██║   ██║█████╗  ██║██║     █████╗  ")
         print(Fore.YELLOW + Style.BRIGHT + "██╔═══╝ ██╔══██╗██║   ██║██╔══╝  ██║██║     ██╔══╝  ")
-        print(Fore.YELLOW + Style.BRIGHT + "██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████")
+        print(Fore.YELLOW + Style.BRIGHT + "██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████ ")
         print(Fore.YELLOW + Style.BRIGHT + "╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝")
         print("")
-        print(Fore.GREEN + "=" * 49)
+        print(Fore.GREEN + "=" * 60)
         print("")
 
         display_profile(profile)
         print("1. Edit Profile")
         print("2. Order History")
-        print("3. Exit Profile Page")
-        print("4. Log out")
+        print("3. Log out")
 
-        profile_choice = input("\nEnter your choice (1-3): ").strip()
+        profile_choice = input("\nEnter your choice (1-3) / for back: ").strip()
 
         if profile_choice == "1":
             clear_screen()
@@ -94,18 +93,21 @@ def profile_page(user_id):
         elif profile_choice == "2":
             from src.order_history import order_choice
             order_choice(user_id)
-            time.sleep(1)
+            time.sleep(0.5)
 
-        elif profile_choice == "3":
+        elif profile_choice =="3":
+             from src.startup_page import startup
+             clear_screen()
+             print("\nThank you for shopping with us! Logging out")
+             time.sleep(0.5)
+             startup()
+
+        elif profile_choice == "/":
             print("Exiting Profile Page...")
             from src.home_page import home
             home(user_id)  # Pass the integer user_id
-            break
-
-        elif profile_choice =="4":
-             from src.startup_page import startup
-             startup()
+            break    
 
         else:
             print("Invalid choice! Please try again.")
-            time.sleep(1)
+            time.sleep(0.5)

@@ -57,73 +57,23 @@ def editProfile(user_profile):
         print("")
 
         print("\nEdit Profile Page:")
-        print("1. Edit Username")
-        print("2. Edit Profile Name")
-        print("3. Edit Password")
-        print("4. Edit Address")
-        print("5. Edit Phone Number")
-        print("6. Delete your Account")
-        print("7. Exit Edit Options")
+        print("1. Edit Password")
+        print("2. Edit Address")
+        print("3. Edit Phone Number")
+        print("4. Delete your Account")
+    
 
-        editProfile_choice = input("\nEnter your editProfile_choice (1-7): ").strip()
+        editProfile_choice = input("\nEnter your editProfile_choice (1-4 / for back): ").strip()
 
         try:
             # Connect to the database
             user_data = sqlite3.connect(db_path)
             cursor = user_data.cursor()
 
+
+
+
             if editProfile_choice == "1":
-                clear_screen()
-                
-                # header of home
-                print(Fore.GREEN + "=" * 49)
-                print("")
-                print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╗ ██╗████████╗    ██╗   ██╗███████╗███████╗██████╗ ███╗   ██╗ █████╗ ███╗   ███╗███████")
-                print(Fore.YELLOW + Style.BRIGHT + "██╔════╝██╔══██╗██║╚══██╔══╝    ██║   ██║██╔════╝██╔════╝██╔══██╗████╗  ██║██╔══██╗████╗ ████║██╔════╝")
-                print(Fore.YELLOW + Style.BRIGHT + "█████╗  ██║  ██║██║   ██║       ██║   ██║███████╗█████╗  ██████╔╝██╔██╗ ██║███████║██╔████╔██║█████╗  ")
-                print(Fore.YELLOW + Style.BRIGHT + "██╔══╝  ██║  ██║██║   ██║       ██║   ██║╚════██║██╔══╝  ██╔══██╗██║╚██╗██║██╔══██║██║╚██╔╝██║██╔══╝  ")
-                print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╔╝██║   ██║       ╚██████╔╝███████║███████╗██║  ██║██║ ╚████║██║  ██║██║ ╚═╝ ██║███████╗")
-                print(Fore.YELLOW + Style.BRIGHT + "╚══════╝╚═════╝ ╚═╝   ╚═╝        ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝")
-                print("")
-                print(Fore.GREEN + "=" * 49)
-                print("")
-
-
-                new_username = input("\nEnter new username: ").strip()
-                cursor.execute("UPDATE user SET username = ? WHERE user_id = ?", (new_username, user_profile["user_id"]))  
-                user_profile["username"] = new_username  # Update the profile dictionary
-                user_data.commit()
-                print("Username updated successfully!\n")
-                time.sleep(0.5)
-                clear_screen()
-
-            elif editProfile_choice == "2":
-                clear_screen()
-
-                # header of edit name
-                print(Fore.GREEN + "=" * 49)
-                print("")
-                print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╗ ██╗████████╗    ███╗   ██╗ █████╗ ███╗   ███╗███████")
-                print(Fore.YELLOW + Style.BRIGHT + "██╔════╝██╔══██╗██║╚══██╔══╝    ████╗  ██║██╔══██╗████╗ ████║██╔════╝")
-                print(Fore.YELLOW + Style.BRIGHT + "█████╗  ██║  ██║██║   ██║       ██╔██╗ ██║███████║██╔████╔██║█████╗  ")
-                print(Fore.YELLOW + Style.BRIGHT + "██╔══╝  ██║  ██║██║   ██║       ██║╚██╗██║██╔══██║██║╚██╔╝██║██╔══╝  ")
-                print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╔╝██║   ██║       ██║ ╚████║██║  ██║██║ ╚═╝ ██║███████╗")
-                print(Fore.YELLOW + Style.BRIGHT + "╚══════╝╚═════╝ ╚═╝   ╚═╝       ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝")
-                print("")
-                print(Fore.GREEN + "=" * 49)
-                print("")
-
-                new_first_name = input("\nEnter new first name: ").strip()
-                new_last_name = input("\nEnter new last name: ").strip()
-                cursor.execute("UPDATE user SET first_name = ?, last_name = ? WHERE user_id = ?", 
-                               (new_first_name, new_last_name, user_profile["user_id"]))  
-                user_profile["profile_name"] = f"{new_first_name} {new_last_name}"  
-                user_data.commit()
-                print("Profile name updated successfully!\n")
-                time.sleep(0.5)
-                clear_screen()
-
-            elif editProfile_choice == "3":
                 clear_screen()
 
                 # banner for edit password
@@ -148,7 +98,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif editProfile_choice == "4":
+            elif editProfile_choice == "2":
                 clear_screen()
                 
                 # banner for edit address
@@ -173,7 +123,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif editProfile_choice == "5":
+            elif editProfile_choice == "3":
                 clear_screen()
                 
                 # banner for edit phone number
@@ -196,7 +146,7 @@ def editProfile(user_profile):
                 time.sleep(0.5)
                 clear_screen()
 
-            elif editProfile_choice == "6":
+            elif editProfile_choice == "4":
                 # Delete user logic here
                 confirmation = input(
                     Fore.RED + "\nAre you sure you want to delete your account? (yes/no): ").strip().lower()
@@ -236,9 +186,10 @@ def editProfile(user_profile):
                     time.sleep(1)
 
 
-            elif editProfile_choice == "7":
+            elif editProfile_choice == "/":
                 clear_screen()
                 print("Exiting Edit Options...\n")
+                time.sleep(0.5)
                 from src.profile_page import profile_page
                 break
 

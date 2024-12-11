@@ -19,8 +19,12 @@ def fetch_order_history(user_id):
     try:
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        query = """SELECT o.order_date, p.product_name, o.quantity, o.status FROM orders 
-        JOIN products p ON o.product_id = p.product_id WHERE o.user_id = ? ORDER BY o.order_date DESC"""
+        query = """
+        SELECT order_id, order_date, amount_paid, address, order_status
+        FROM orders 
+        WHERE user_id = ? 
+        ORDER BY order_date DESC
+        """
         cursor.execute(query, (user_id,))
         orders = cursor.fetchall()
         connection.close()
@@ -36,13 +40,27 @@ def order_history(order_list):
         print("\nNo orders found.")
         return
 
-    print("-" * 57)
-    print(f"{'Date':<12} {'Item Name':<20} {'Quantity':<8} {'Status':<12}")
-    print("-" * 57)
+
+
+
+    print()
+    print(Fore.YELLOW + Style.BRIGHT + " ██████╗ ██████╗ ██████╗ ███████╗██████╗     ██╗  ██╗██╗███████╗████████╗ ██████╗ ██████╗ ██╗   ██╗ ")
+    print(Fore.YELLOW + Style.BRIGHT + "██╔═══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗    ██║  ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝ ")
+    print(Fore.YELLOW + Style.BRIGHT + "██║   ██║██████╔╝██║  ██║█████╗  ██████╔╝    ███████║██║███████╗   ██║   ██║   ██║██████╔╝ ╚████╔╝  ")
+    print(Fore.YELLOW + Style.BRIGHT + "██║   ██║██╔══██╗██║  ██║██╔══╝  ██╔══██╗    ██╔══██║██║╚════██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝   ")
+    print(Fore.YELLOW + Style.BRIGHT + "╚██████╔╝██║  ██║██████╔╝███████╗██║  ██║    ██║  ██║██║███████║   ██║   ╚██████╔╝██║  ██║   ██║    ")
+    print(Fore.YELLOW + Style.BRIGHT + "╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝     ")
+
+
+
+    print(Fore.GREEN + Style.BRIGHT +"=" * 100)
+    print(f"{'Order ID':<18} {'Date':<18} {'Amount':<20} {'Address':<31}{'Status':<12}")
+    print(Fore.GREEN + Style.BRIGHT +"=" * 100)
+
     for order in order_list:
-        date, item_name, quantity, status = order
-        print(f"{date:<12} {item_name:<20} {quantity:<8} {status:<12}")
-    print("-" * 57)
+        order_id, order_date, amount_paid, address, order_status = order
+        print(f"{order_id:<12} {order_date:<24} {amount_paid:<11} {address:<40}{ order_status:<20}")
+    print(Fore.GREEN + Style.BRIGHT +"=" * 100)
 
 
 def order_choice(user_id):
@@ -55,22 +73,17 @@ def order_choice(user_id):
         order_history(orders)
 
         print("\n1. Refresh Order History")
-        print("2. Exit Order History")
-        print("3. Log Out")
+    
 
-        choice = input("\nEnter your choice (1-3): ").strip()
+        choice = input("\nEnter your choice. / for back: ").strip()
 
         if choice == "1":
             continue
-        elif choice == "2":
+        elif choice == "/":
             print("\nExiting Order History...")
-            time.sleep(1)
+            time.sleep(0.5)
             break
-        elif choice == "3":
-            from src.startup_page import startup
-            print("\nLogging out...")
-            time.sleep(1)
-            startup()
+ 
         else:
             print("Invalid choice! Please try again.")
-            time.sleep(1)
+            time.sleep(0.5)
