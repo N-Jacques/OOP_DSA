@@ -1,4 +1,4 @@
-import getpass
+import msvcrt # for password asterisk inputs
 from src.home_page import home
 import sqlite3
 import time
@@ -9,6 +9,23 @@ db_path = "./database/data.db"  # relative path to database
 user_data = sqlite3.connect(db_path)  # assign database to varable
 
 init(autoreset=True) # Initialize colorama
+
+def input_password(prompt="Enter Password: "):
+    print(prompt, end="", flush=True)
+    password = ""
+    while True:
+        char = msvcrt.getch()
+        if char == b"\r":  # Enter key pressed
+            break
+        elif char == b"\x08":  # Backspace key pressed
+            if len(password) > 0:
+                password = password[:-1]
+                print("\b \b", end="", flush=True)
+        else:
+            password += char.decode('utf-8')
+            print("*", end="", flush=True)
+    print()  # Move to the next line
+    return password
 
 def verify_user(username, password):  # Verify if the provided username and password exist in the database.
     cursor = user_data.cursor()  # Object to interact with database
@@ -45,7 +62,7 @@ def login():
                     break  # Valid input
 
             # Get password securely
-            login_pass = getpass.getpass("Enter password: ")  # Hide password when typing
+            login_pass = input_password()  # Hide password when typing
             if login_pass.lower() == '/':
                 print("Returning to Main Menu...")
                 time.sleep(1.5)
