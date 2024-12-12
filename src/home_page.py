@@ -79,8 +79,9 @@ def home(user_id): # main function of the homepage
         elif choice == "4":
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
+            from src.startup_page import startup
+            startup()
             time.sleep(1)
-            return
 
         else:
             clear_screen()
