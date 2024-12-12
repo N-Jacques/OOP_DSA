@@ -120,5 +120,6 @@ def checkout(cart_id, user_id, total_cost):
         
         print(f"\nTotal Amount Paid: Php{total_due:.2f}")
         print("\nThank you for shopping with us!")
+        time.sleep(2)
     else:
         print("Checkout cancelled.")
