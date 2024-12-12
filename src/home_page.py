@@ -70,7 +70,7 @@ def home(user_id): # main function of the homepage
 
         elif choice == "2":
             clear_screen() 
-            category_page() # TODO insert user_id when done linking user_id in cart page 
+            category_page(user_id) 
 
         elif choice == "3":
             clear_screen()
