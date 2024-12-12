@@ -1,12 +1,30 @@
-import getpass
 import sqlite3
 import time
 from colorama import Fore, Style, init
+import msvcrt # for password asterisk inputs
+
 
 db_path = "./database/data.db"  # Path to your database file
 user_data = sqlite3.connect(db_path)  # Connect to the database
 
 init(autoreset=True) # Initialize colorama
+
+def input_password(prompt="Enter Password: "):
+    print(prompt, end="", flush=True)
+    password = ""
+    while True:
+        char = msvcrt.getch()
+        if char == b"\r":  # Enter key pressed
+            break
+        elif char == b"\x08":  # Backspace key pressed
+            if len(password) > 0:
+                password = password[:-1]
+                print("\b \b", end="", flush=True)
+        else:
+            password += char.decode('utf-8')
+            print("*", end="", flush=True)
+    print()  # Move to the next line
+    return password
 
 def signup():
     print(Fore.GREEN + "=" * 49)
@@ -71,7 +89,7 @@ def signup():
                     break  # Valid input and username is available
                     
             while True:
-                signup_pass = getpass.getpass("Enter Password: ")
+                signup_pass = input_password()
                 if signup_pass.lower() == '/':
                     print("Returning to Main Menu...")
                     time.sleep(1.5)
