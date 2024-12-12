@@ -1,13 +1,33 @@
 import sqlite3
+import os
 import time
 from colorama import Fore, Style, init
 from datetime import datetime
 
+
 db_path = "./database/data.db"
 
-def clear_screen():
-    """Clears the screen."""
-    print("\n" * 50)
+def clear_screen():  # clears screen
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+def clear_cart(cart_id):
+    """Clear the items from the cart in the database."""
+    try:
+        user_data = sqlite3.connect(db_path)
+        cursor = user_data.cursor()
+        
+        # Delete items from Cart_Items table
+        delete_query = "DELETE FROM Cart_Items WHERE cart_id = ?"
+        cursor.execute(delete_query, (cart_id,))
+        user_data.commit()
+        print(Fore.GREEN + "Cart items cleared successfully.")
+    except sqlite3.Error as e:
+        print(Fore.RED + f"Error clearing cart: {e}")
+    finally:
+        user_data.close()
 
 def checkout(cart_id, user_id, total_cost):
     """Handle the checkout process."""
@@ -100,6 +120,7 @@ def checkout(cart_id, user_id, total_cost):
         """
         cursor.execute(insert_order_query, (user_id, cart_id, address, total_due, order_date, order_status))
         user_data.commit()
+        clear_screen()
 
         # Step 9: Display order confirmation
         order_id = cursor.lastrowid
@@ -120,6 +141,8 @@ def checkout(cart_id, user_id, total_cost):
         
         print(f"\nTotal Amount Paid: Php{total_due:.2f}")
         print("\nThank you for shopping with us!")
+        
         time.sleep(2)
+        clear_cart(cart_id)
     else:
         print("Checkout cancelled.")

@@ -47,7 +47,18 @@ def view_cart(user_id):
         cart_items = cart_cursor.fetchall()
 
         if not cart_items:
-            print("Your cart is empty.")
+            print(Fore.GREEN + "=" * 39)
+            print("")
+            print(Fore.RED + Style.BRIGHT + "██╗   ██╗ ██████╗ ██╗   ██╗██████╗      ██████╗ █████╗ ██████╗ ████████╗    ██╗███████╗    ███████╗███╗   ███╗██████╗ ████████╗██╗   ██╗")
+            print(Fore.RED + Style.BRIGHT + "╚██╗ ██╔╝██╔═══██╗██║   ██║██╔══██╗    ██╔════╝██╔══██╗██╔══██╗╚══██╔══╝    ██║██╔════╝    ██╔════╝████╗ ████║██╔══██╗╚══██╔══╝╚██╗ ██╔╝")
+            print(Fore.RED + Style.BRIGHT + " ╚████╔╝ ██║   ██║██║   ██║██████╔╝    ██║     ███████║██████╔╝   ██║       ██║███████╗    █████╗  ██╔████╔██║██████╔╝   ██║    ╚████╔╝ ")
+            print(Fore.RED + Style.BRIGHT + "  ╚██╔╝  ██║   ██║██║   ██║██╔══██╗    ██║     ██╔══██║██╔══██╗   ██║       ██║╚════██║    ██╔══╝  ██║╚██╔╝██║██╔═══╝    ██║     ╚██╔╝  ")
+            print(Fore.RED + Style.BRIGHT + "   ██║   ╚██████╔╝╚██████╔╝██║  ██║    ╚██████╗██║  ██║██║  ██║   ██║       ██║███████║    ███████╗██║ ╚═╝ ██║██║        ██║      ██║   ")
+            print(Fore.RED + Style.BRIGHT + "   ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝       ╚═╝╚══════╝    ╚══════╝╚═╝     ╚═╝╚═╝        ╚═╝      ╚═╝   ")
+            print("")
+            print(Fore.GREEN + "=" * 39)
+
+            time.sleep(1)
             return  # No items in the cart, exit
 
         # Step 3: Display the cart items in a table format
