@@ -35,6 +35,7 @@ def fetch_order_history(user_id):
 
 
 def order_history(order_list):
+    clear_screen()
     """Display the order history table."""
     if not order_list:
         print("\nNo orders found.")
@@ -46,7 +47,7 @@ def order_history(order_list):
     print(Fore.YELLOW + Style.BRIGHT + "██║   ██║██████╔╝██║  ██║█████╗  ██████╔╝    ███████║██║███████╗   ██║   ██║   ██║██████╔╝ ╚████╔╝  ")
     print(Fore.YELLOW + Style.BRIGHT + "██║   ██║██╔══██╗██║  ██║██╔══╝  ██╔══██╗    ██╔══██║██║╚════██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝   ")
     print(Fore.YELLOW + Style.BRIGHT + "╚██████╔╝██║  ██║██████╔╝███████╗██║  ██║    ██║  ██║██║███████║   ██║   ╚██████╔╝██║  ██║   ██║    ")
-    print(Fore.YELLOW + Style.BRIGHT + " ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝     ")
+    print(Fore.YELLOW + Style.BRIGHT + " ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝    ")
 
 
 
@@ -80,6 +81,7 @@ def order_choice(user_id):
         elif choice == "0":
             print("\nExiting Order History...")
             time.sleep(0.5)
+            clear_screen()
             break
  
         else:

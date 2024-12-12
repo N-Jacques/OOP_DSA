@@ -59,7 +59,7 @@ def home(user_id): # main function of the homepage
 
         print()
         print()
-
+        
         choice = input("Enter your choice (1-4): ").strip()
         print()
 
@@ -79,9 +79,11 @@ def home(user_id): # main function of the homepage
         elif choice == "4":
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
+            from src.startup_page import startup
             time.sleep(1)
-            return
-
+            startup()
+            
+            
         else:
             clear_screen()
             print("Invalid choice")

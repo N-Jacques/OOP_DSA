@@ -52,17 +52,44 @@ def get_product_details(product_id: str) -> Optional[Dict[str, str]]:
 def add_to_cart(product_id: str, user_id: int):
     """Add the selected product and quantity to the user's cart."""
     try:
-        quantity = int(input("Enter quantity to add to cart: "))
+        # Get product details including colors and stock
+        product_details = get_product_details(product_id)
 
-        # Validate quantity
+        if not product_details:
+            print("Product not found.")
+            return
+
+        # Display color options
+        colors = product_details['colors'].split(', ')
+        print("Available Colors: ")
+        for prod_color, color in enumerate(colors, start=1):
+            print(f"{prod_color}. {color}")
+
+        # Ask user to select a color
+        color_choice = input(f"Select color (1-{len(colors)} / return): ").strip()
+        
+        if not color_choice.isdigit() or not 1 <= int(color_choice) <= len(colors):
+            print("Invalid choice, please select a valid color.")
+            return
+        
+
+        selected_color = colors[int(color_choice) - 1]
+        
+        # Ask for quantity
+        quantity = int(input("Enter quantity to add to cart: ").strip())
+
         if quantity <= 0:
             print("Quantity must be greater than 0.")
             return
-
-        # Fetch product details
-        product_details = get_product_details(product_id)
+        
+        # Fetch the price and stock for the selected color
         price = float(product_details['price'])
+        stock = int(product_details['stock'])
 
+        if quantity > stock:
+            print(f"Only {stock} items are available in {selected_color} color. Please adjust your quantity.")
+            return
+        
         # Connect to the database
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
@@ -79,13 +106,12 @@ def add_to_cart(product_id: str, user_id: int):
                 conn.commit()
                 cart_id = cursor.lastrowid
 
-            # Fetch the product_color_id for the selected product
+            # Fetch the product_color_id for the selected product and color
             cursor.execute("""
                 SELECT product_color_id 
                 FROM Product_Color 
-                WHERE product_id = ? 
-                LIMIT 1
-            """, (product_id,))
+                WHERE product_id = ? AND color = ?
+            """, (product_id, selected_color))
             product_color_id = cursor.fetchone()
 
             if not product_color_id:
@@ -102,7 +128,7 @@ def add_to_cart(product_id: str, user_id: int):
 
             conn.commit()
 
-            print(f"{quantity} of {product_details['product_name']} successfully added to your cart!")
+            print(f"{quantity} of {product_details['product_name']} in {selected_color} color successfully added to your cart!")
             input("Press Enter to continue...")
 
             # Return to the category page
@@ -153,5 +179,6 @@ def display_product_details(product_id: str, user_id: int) -> None:
 
         elif add_to_cart_choice == 'no':
             return
-
-    
+        
+        else:
+            print("Invalid choice. Try again.")
