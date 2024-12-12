@@ -34,7 +34,7 @@ def category_page(user_id):
             '1': "Appliances",
             '2': "Toiletries",
             '3': "Kitchenware",
-            '4': "Furnitures",
+            '4': "Furniture",
             '5': "Electronics"
         }
 
