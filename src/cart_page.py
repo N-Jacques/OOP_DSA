@@ -32,12 +32,14 @@ def view_cart(user_id):
         query = """
         SELECT 
             Cart_Items.cart_item_id, 
+            Product.product_name,
             Cart_Items.quantity, 
             Cart_Items.total_price, 
             Product_Color.color, 
             Cart_Items.price
         FROM Cart_Items
         INNER JOIN Product_Color ON Cart_Items.product_color_id = Product_Color.product_color_id
+        INNER JOIN Product ON Product_Color.product_id = Product.product_id
         WHERE Cart_Items.cart_id = ?
         """
         cart_cursor.execute(query, (cart_id,))
@@ -50,12 +52,12 @@ def view_cart(user_id):
         # Step 3: Display the cart items in a table format
         total_cost = 0
         print("\nYour Cart Items:")
-        print(f"{'Item ID':<10} {'Color':<10} {'Price ($)':<12} {'Quantity':<10} {'Total Price ($)':<15}")
+        print(f"{'Item ID':<10} {'Product Name':<20} {'Color':<10} {'Price ($)':<12} {'Quantity':<10} {'Total Price ($)':<15}")
         
         for item in cart_items:
-            cart_item_id, quantity, total_price, color, price = item
+            cart_item_id, product_name, quantity, total_price, color, price = item
             total_cost += total_price
-            print(f"{cart_item_id:<10} {color:<10} {price:<12.2f} {quantity:<10} {total_price:<15.2f}")
+            print(f"{cart_item_id:<10} {product_name:<20} {color:<10} {price:<12.2f} {quantity:<10} {total_price:<15.2f}")
         
         print(f"\n{'Total Cost':<42} ${total_cost:.2f}")
         print(f"{'Total Items':<42} {len(cart_items)}")
@@ -85,6 +87,7 @@ def view_cart(user_id):
             return "exit"
         else:
             print("Invalid input. Please choose a valid option.")
+
 # Function to change the quantity of a cart item
 def change_quantity(cart_id, item_id, new_quantity, cursor, connection):
     if new_quantity <= 0:
@@ -117,3 +120,21 @@ def remove_item(cart_id, item_id, cursor, connection):
     cursor.execute(delete_query, (item_id, cart_id))
     connection.commit()
     print(f"Item ID {item_id} removed from the cart.")
+
+# Function to save checkout data into the database
+def save_checkout_data(cart_id, address, payment_method, total_due):
+    """Save checkout details to the database."""
+    user_data = sqlite3.connect(db_path)
+    cursor = user_data.cursor()
+
+    query = """
+    INSERT INTO Checkout (cart_id, address, payment_method, total_due)
+    VALUES (?, ?, ?, ?)
+    """
+    cursor.execute(query, (cart_id, address, payment_method, total_due))
+    user_data.commit()
+
+    # Retrieve the last inserted checkout_id
+    checkout_id = cursor.lastrowid
+    print(f"\nCheckout data saved successfully! Checkout ID: {checkout_id}")
+    return checkout_id  # Return the checkout_id
