@@ -2,6 +2,7 @@ import os
 import sqlite3
 from typing import Dict, Optional
 from src.productDetails_page import display_product_details
+from colorama import Fore, Style, init
 
 db_path = "./database/data.db"
 
@@ -80,20 +81,25 @@ def display_products(category: Optional[str] = None) -> Dict[str, Dict]:
         input("Press Enter to continue...")
         return {}
 
+
+
+
+
     print(f"\n=== Products in {category if category else 'All Categories'} ===")
-    print(f"{'No.':<10}{'Product Name':<25}{'Color':<20}{'Price':<10}{'Stock':<10}")
-    print("-" * 70)
+    print(f"{'No.':<10}{'Product Name':<25}{'Color':<20}{'Price':<10}{'Stock':<10}{'Description':<15}")
+    print(Fore.GREEN + Style.BRIGHT +"=" * 130)
     
     product_number = 1  # Start numbering from 1
     product_map = {}  # To map the numbers to product IDs
     
     for pid, details in products.items():
         for variant in details["variants"]:
-            print(f"{product_number:<10}{details['product_name']:<25}{variant['color']:<20}₱{variant['price']:<10}{variant['stock']:<10}")
+            # Use `details["description"]` for the description
+            print(f"{product_number:<10}{details['product_name']:<25}{variant['color']:<20}₱{variant['price']:<10}{variant['stock']:<10}{details['description']:<15}")
             product_map[product_number] = pid  # Map the number to the product_id
-            product_number += 1
-    
-    return product_map  # Return the mapping of number to product ID
+            product_number += 1 
+    print(Fore.GREEN + Style.BRIGHT +"=" * 130)
+    return product_map
 
 def product_selection(filtered_products: Dict[int, str]) -> Optional[str]:
     """
@@ -107,6 +113,7 @@ def product_selection(filtered_products: Dict[int, str]) -> Optional[str]:
     """
     while True:
         try:
+            print()
             product_number = input("Enter the product number to view details (or 0 to go back): ").strip()
             
             if product_number == "0":
@@ -124,17 +131,12 @@ def product_selection(filtered_products: Dict[int, str]) -> Optional[str]:
         except ValueError:
             print("Please enter a valid number.")
 
-def products_page(category: Optional[str] = None) -> None:
-    """
-    Main function to display products and handle product selection.
-    
-    Args:
-        category (str, optional): Filter products by category. Defaults to None.
-    """
+def products_page(user_id, category=None):
     filtered_products = display_products(category)
 
     if filtered_products:
         product_id = product_selection(filtered_products)
 
         if product_id:
-            display_product_details(product_id)
+            from src.productDetails_page import display_product_details
+            display_product_details(product_id, user_id)  # Pass user_id

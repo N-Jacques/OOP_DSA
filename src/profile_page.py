@@ -28,25 +28,26 @@ def verify_user(user_id):#Verify if the provided username exist in the database.
         return False
 
 def fetch_user_data(user_id):
-        cursor = user_data.cursor()
-        cursor.execute( # Query to retrieve user information TODO add "password" when implenting hide pass
-            "SELECT user_id, username, first_name, last_name, password, address, phone_number FROM user WHERE user_id = ?", (user_id,)
-        )  
-        user = cursor.fetchone()  # Fetch row
-        if user:
-            return {
-                "user_id": user[0],  # Include user_id here
-                "username": user[1],
-                "profile_name": f"{user[2]} {user[3]}",  # Combine first_name and last_name
-                #"password": user[4], TODO remove comment logo when implenting count the char val of pass then convert to asterisk
-                "address": user[5],
-                "phone_number": user[6],
-            }      
-        else:
-            print("User not found in the database.")
-            time.sleep(2)
-            clear_screen()
-            return None       
+    cursor = user_data.cursor()
+    cursor.execute(
+        "SELECT user_id, username, first_name, last_name, password, address, phone_number FROM user WHERE user_id = ?", (user_id,)
+    )  
+    user = cursor.fetchone()  # Fetch row
+    if user:
+        return {
+            "user_id": user[0],  # Include user_id here
+            "username": user[1],
+            "profile_name": f"{user[2]} {user[3]}",  # Combine first_name and last_name
+            "password": user[4],  # Now including the password field
+            "address": user[5],
+            "phone_number": user[6],
+        }      
+    else:
+        print("User not found in the database.")
+        time.sleep(2)
+        clear_screen()
+        return None
+
 
 def display_profile(user_id):#Displays user profile information.
         print("Accessing your profile...")
@@ -54,10 +55,13 @@ def display_profile(user_id):#Displays user profile information.
         print(Fore.GREEN + Style.BRIGHT +"=" * 40)
         print(f"Username: {user_id['username']}")
         print(f"Name: {user_id['profile_name']}")
-        print("Password: **********")
+        # Dynamically generate asterisks based on password length
+        password_length = len(user_id['password'])
+        print(f"Password: {'*' * password_length}")
         print(f"Address: {user_id['address']}")
         print(f"Phone number: {user_id['phone_number']}")
         print(Fore.GREEN + Style.BRIGHT +"=" * 40)
+        clear_screen()
 
 def profile_page(user_id):
     profile = fetch_user_data(user_id)  # Fetch user data using the ID
@@ -83,7 +87,7 @@ def profile_page(user_id):
         print("2. Order History")
         print("3. Log out")
 
-        profile_choice = input("\nEnter your choice (1-3) / for back: ").strip()
+        profile_choice = input("\nEnter your choice (1-3) 0 for back: ").strip()
 
         if profile_choice == "1":
             clear_screen()
@@ -102,7 +106,7 @@ def profile_page(user_id):
              time.sleep(0.5)
              startup()
 
-        elif profile_choice == "/":
+        elif profile_choice == "0":
             print("Exiting Profile Page...")
             from src.home_page import home
             home(user_id)  # Pass the integer user_id

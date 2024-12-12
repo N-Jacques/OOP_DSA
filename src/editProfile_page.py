@@ -64,9 +64,10 @@ def editProfile(user_profile):
         print("2. Edit Address")
         print("3. Edit Phone Number")
         print("4. Delete your Account")
+        print("0. Go back")
     
 
-        editProfile_choice = input("\nEnter your editProfile_choice (1-4 / for back): ").strip()
+        editProfile_choice = input("\nEnter your editProfile_choice (1-5): ").strip()
 
         try:
             # Connect to the database
@@ -189,7 +190,7 @@ def editProfile(user_profile):
                     time.sleep(1)
 
 
-            elif editProfile_choice == "/":
+            elif editProfile_choice == "0":
                 clear_screen()
                 print("Exiting Edit Options...\n")
                 time.sleep(0.5)
