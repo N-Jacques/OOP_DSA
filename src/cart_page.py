@@ -161,20 +161,4 @@ def remove_item(cart_id, item_id, cursor, connection):
         print("Item not found in the cart.")
         time.sleep(1.5)
 
-# Function to save checkout data into the database
-def save_checkout_data(cart_id, address, payment_method, total_due):
-    """Save checkout details to the database."""
-    user_data = sqlite3.connect(db_path)
-    cursor = user_data.cursor()
 
-    query = """
-    INSERT INTO Checkout (cart_id, address, payment_method, total_due)
-    VALUES (?, ?, ?, ?)
-    """
-    cursor.execute(query, (cart_id, address, payment_method, total_due))
-    user_data.commit()
-
-    # Retrieve the last inserted checkout_id
-    checkout_id = cursor.lastrowid
-    print(f"\nCheckout data saved successfully! Checkout ID: {checkout_id}")
-    return checkout_id  # Return the checkout_id

@@ -1,174 +1,124 @@
-from datetime import datetime
 import sqlite3
+import time
+from colorama import Fore, Style, init
+from datetime import datetime
 
 db_path = "./database/data.db"
 
-# Function to fetch cart details
-def fetch_cart_details(cart_id):
-    """Fetch cart details including items and calculate total cost."""
+def clear_screen():
+    """Clears the screen."""
+    print("\n" * 50)
+
+def checkout(cart_id, user_id, total_cost):
+    """Handle the checkout process."""
     user_data = sqlite3.connect(db_path)
     cursor = user_data.cursor()
 
-    # Fetch items in the cart
+    # Step 1: Fetch user information (address) from the User table
+    query = "SELECT first_name, last_name, address FROM User WHERE user_id = ?"
+    cursor.execute(query, (user_id,))
+    user_info = cursor.fetchone()
+
+    if user_info is None:
+        print(Fore.RED + Style.BRIGHT + "User not found.")
+        return
+
+    first_name, last_name, address = user_info
+
+    # Step 2: Display order summary
+    clear_screen()
+    print(Fore.GREEN + "=" * 39)
+    print(Fore.YELLOW + Style.BRIGHT + "██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗ ██████╗ ██╗   ██╗████████╗")
+    print(Fore.YELLOW + Style.BRIGHT + "██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔═══██╗██║   ██║╚══██╔══╝")
+    print(Fore.YELLOW + Style.BRIGHT + "██║     ███████║█████╗  ██║     █████╔╝ ██║   ██║██║   ██║   ██║   ")
+    print(Fore.YELLOW + Style.BRIGHT + "██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██║   ██║██║   ██║   ██║   ")
+    print(Fore.YELLOW + Style.BRIGHT + "╚██████╗██║  ██║███████╗╚██████╗██║  ██╗╚██████╔╝╚██████╔╝   ██║   ")
+    print(Fore.YELLOW + Style.BRIGHT + " ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝    ╚═╝   ")
+
+    print(Fore.GREEN + "=" * 39)
+    print("\nYour Cart Items:")
+    print("=" * 85)
+
+    # Step 3: Retrieve the cart items for the user and display them
     query = """
-    SELECT p.product_name, ci.price, ci.quantity, ci.total_price
-    FROM Cart_Items ci
-    JOIN Product_Color pc ON ci.product_color_id = pc.product_color_id
-    JOIN Product p ON pc.product_id = p.product_id
-    WHERE ci.cart_id = ?
+    SELECT 
+        Cart_Items.cart_item_id, 
+        Product.product_name, 
+        Cart_Items.quantity, 
+        Cart_Items.total_price, 
+        Product_Color.color, 
+        Cart_Items.price
+    FROM Cart_Items
+    INNER JOIN Product_Color ON Cart_Items.product_color_id = Product_Color.product_color_id
+    INNER JOIN Product ON Product_Color.product_id = Product.product_id
+    WHERE Cart_Items.cart_id = ?
     """
     cursor.execute(query, (cart_id,))
     cart_items = cursor.fetchall()
 
-    # Calculate total cost
-    total_cost = sum(item[3] for item in cart_items)
-
-    return cart_items, total_cost
-
-
-# Function to fetch user's address
-def fetch_user_address(user_id):
-    """Fetch the address of the user."""
-    user_data = sqlite3.connect(db_path)
-    cursor = user_data.cursor()
-
-    query = """
-    SELECT address
-    FROM User
-    WHERE user_id = ?
-    """
-    cursor.execute(query, (user_id,))
-    address = cursor.fetchone()
-
-    if address:
-        return address[0]
-    else:
-        return "Address not found. Please update your profile."
-
-
-# Function to display cart contents and calculate total cost
-def view_cart(cart_items, total_cost):
-    """Display the cart contents."""
     if not cart_items:
-        print("\nYour cart is empty.")
-    else:
-        print("\nYour Cart:")
-        for item_number, item in enumerate(cart_items, start=1):
-            product_name, price, quantity, total_price = item
-            print(f"{item_number}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
-        print(f"Subtotal: ₱{total_cost:,.2f}")
-
-
-# Function to handle the checkout process
-def checkout(user_id, cart_id):
-    """Checkout and generate receipt."""
-    print("\nCheckout:")
-    
-    # Fetch cart details
-    cart_items, total_cost = fetch_cart_details(cart_id)
-
-    if not cart_items:
-        print("Your cart is empty. Add items before checking out.")
+        print("Your cart is empty.")
         return
 
-    # View cart and calculate totals
-    view_cart(cart_items, total_cost)
+    total_cost = 0
+    for item in cart_items:
+        cart_item_id, product_name, quantity, total_price, color, price = item
+        total_cost += total_price
+        print(f"{cart_item_id:<10} {product_name:<20} {color:<10} {price:<12.2f} {quantity:<10} {total_price:<15.2f}")
 
-    # Fetch user address
-    address = fetch_user_address(user_id)
-    print(f"\nShipping Address: {address}")
+    print("=" * 85)
+    print(f"\nTotal Cost: Php{total_cost:.2f}")
+    print(f"Total Items: {len(cart_items)}")
+    
+    # Step 4: Show shipping address
+    print("\nShipping Address:")
+    print("-" * 20)
+    print(f"{first_name} {last_name}\n{address}")
+    print("=" * 20)
 
-    # Add shipping fee
+    # Step 5: Include shipping fee (hardcoded for simplicity)
     shipping_fee = 40.00
-    print(f"Shipping Fee: ₱{shipping_fee:,.2f}")
+    total_due = total_cost + shipping_fee
 
-    # Calculate final total
-    final_total = total_cost + shipping_fee
-    print(f"Total Due (after shipping): ₱{final_total:,.2f}")
+    print(f"Shipping Fee: Php{shipping_fee:.2f}")
+    print(f"Total Due (after shipping): Php{total_due:.2f}")
 
-    # Fetch payment method (use database value if available)
-    payment_method = "Cash"  # Default, but you can query if there are other options
+    # Step 6: Payment method (using default method)
+    payment_method = "Cash on Delivery"
+    print(f"Payment Method: {payment_method}")
 
-    # Confirm payment
-    confirm = input("\nProceed with payment? (y/n): ").strip().lower()
-
-    if confirm == "y":
-        # Generate receipt
+    # Step 7: Confirm to proceed with payment
+    proceed = input("\nProceed with payment? (y/n): ").strip().lower()
+    if proceed == "y":
+        # Step 8: Insert order into Orders table
         order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        order_status = None
-
-        # Save checkout data
-        save_checkout_data(cart_id, address, payment_method, final_total)
-
-        # Insert the order details into the Orders table
-        save_order_data(cart_id, user_id, address, final_total, order_date, order_status)
-
-        # Generate receipt
-        generate_receipt(cart_items, total_cost, 0, cart_id, address, order_date, order_status, final_total)
+        order_status = "Pending"
         
-        print("\nCheckout Complete! You will now be redirected...")
-        # You can add any post-checkout logic here (e.g., redirect to another page, etc.)
+        insert_order_query = """
+        INSERT INTO Orders (user_id, cart_id, address, amount_paid, order_date, order_status)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """
+        cursor.execute(insert_order_query, (user_id, cart_id, address, total_due, order_date, order_status))
+        user_data.commit()
+
+        # Step 9: Display order confirmation
+        order_id = cursor.lastrowid
+        print("\n" + "=" * 39)
+        print(Fore.GREEN + "Checkout Complete! Your order has been successfully placed.")
+        print("=" * 39)
+        print("\nOrder Details:")
+        print("-" * 20)
+        print(f"Order ID: {order_id}")
+        print(f"Order Date: {order_date}")
+        print(f"Order Status: {order_status}")
+        print(f"Shipping Address: {address}")
         
-    elif confirm == "n":
-        print("\nPayment canceled.")
+        print("\nItems Ordered:")
+        for item in cart_items:
+            product_name, quantity = item[1], item[2]
+            print(f"{product_name} (Quantity: {quantity})")
+        
+        print(f"\nTotal Amount Paid: Php{total_due:.2f}")
+        print("\nThank you for shopping with us!")
     else:
-        print("Invalid input. Please type 'y' or 'n'.")
-
-
-# Function to save checkout data into the database
-def save_checkout_data(cart_id, address, payment_method, total_due):
-    """Save checkout details to the database."""
-    user_data = sqlite3.connect(db_path)
-    cursor = user_data.cursor()
-
-    query = """
-    INSERT INTO Checkout (cart_id, address, payment_method, total_due)
-    VALUES (?, ?, ?, ?)
-    """
-    cursor.execute(query, (cart_id, address, payment_method, total_due))
-    user_data.commit()
-    print("\nCheckout data saved successfully!")
-
-
-# Function to generate and display the receipt
-def generate_receipt(cart_items, total, discount, cart_id, address, order_date, order_status, amount_paid):
-    """Generate and display receipt after successful payment."""
-    print("\nReceipt:")
-    print("=" * 30)
-    print(f"Cart ID: {cart_id}")
-    print(f"Order Date: {order_date}")
-    print(f"Order Status: {order_status}")
-    print(f"Shipping Address: {address}")
-    for item_number, item in enumerate(cart_items, start=1):
-        product_name, price, quantity, total_price = item
-        print(f"{item_number}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
-    print("-" * 30)
-    print(f"Subtotal: ₱{total + discount:,.2f}")
-    print(f"Discount: -₱{discount:,.2f}")
-    print(f"Total Paid: ₱{amount_paid:,.2f}")
-    print("=" * 30)
-    print("Thank you for shopping with us!")
-
-
-# Function to save order data into the Orders table
-def save_order_data(cart_id, user_id, address, amount_paid, order_date, order_status):
-    """Save order details to the Orders table."""
-    user_data = sqlite3.connect(db_path)
-    cursor = user_data.cursor()
-
-    query = """
-    INSERT INTO Orders (cart_id, order_date, order_status, amount_paid, address, user_id)
-    VALUES (?, ?, ?, ?, ?, ?)
-    """
-    cursor.execute(query, (cart_id, order_date, order_status, amount_paid, address, user_id))
-    user_data.commit()
-    print("\nOrder data saved successfully!")
-
-
-# Simulate running the checkout process
-def cart_page(user_id, cart_id):
-    """Simulate displaying the cart page."""
-    print("Displaying cart page...")
-    checkout(user_id, cart_id)  # Proceed to checkout after viewing the cart.
-
-
+        print("Checkout cancelled.")
