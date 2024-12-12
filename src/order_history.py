@@ -35,6 +35,7 @@ def fetch_order_history(user_id):
 
 
 def order_history(order_list):
+    clear_screen()
     """Display the order history table."""
     if not order_list:
         print("\nNo orders found.")
