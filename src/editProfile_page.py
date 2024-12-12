@@ -94,12 +94,16 @@ def editProfile(user_profile):
                 print(Fore.YELLOW + Style.BRIGHT + "Type '/' at any time to go back to the main menu.\n")
                 
                 new_password = input("\nEnter new password: ").strip()
-                cursor.execute("UPDATE user SET password = ? WHERE user_id = ?", (new_password, user_profile["user_id"]))  
-                user_profile["password"] = new_password  
-                user_data.commit()
-                print("Password updated successfully!\n")
-                time.sleep(0.5)
-                clear_screen()
+                if new_password != '/':
+                    cursor.execute("UPDATE user SET password = ? WHERE user_id = ?", (new_password, user_profile["user_id"]))  
+                    user_profile["password"] = new_password  
+                    user_data.commit()
+                    print("Password updated successfully!\n")
+                    time.sleep(0.5)
+                    clear_screen()
+                else:
+                    clear_screen()
+                    return
 
             elif editProfile_choice == "2":
                 clear_screen()
@@ -119,12 +123,16 @@ def editProfile(user_profile):
                 print(Fore.YELLOW + Style.BRIGHT + "Type '/' at any time to go back to the main menu.\n")
 
                 new_address = input("\nEnter new address : ").strip()
-                cursor.execute("UPDATE user SET address = ? WHERE user_id = ?", (new_address, user_profile["user_id"]))  
-                user_profile["address_id"] = new_address 
-                user_data.commit()
-                print("Address updated successfully!\n")
-                time.sleep(0.5)
-                clear_screen()
+                if new_address != '/':
+                    cursor.execute("UPDATE user SET address = ? WHERE user_id = ?", (new_address, user_profile["user_id"]))  
+                    user_profile["address_id"] = new_address 
+                    user_data.commit()
+                    print("Address updated successfully!\n")
+                    time.sleep(0.5)
+                    clear_screen()
+                else:
+                    clear_screen()
+                    return
 
             elif editProfile_choice == "3":
                 clear_screen()
@@ -142,12 +150,16 @@ def editProfile(user_profile):
                 print(Fore.GREEN + "=" * 200)
 
                 new_phone_number = input("\nEnter new phone number: ").strip() 
-                cursor.execute("UPDATE user SET phone_number = ? WHERE user_id = ?", (new_phone_number, user_profile["user_id"]))  
-                user_profile["phone_number"] = new_phone_number  
-                user_data.commit()
-                print("Phone number updated successfully!\n")
-                time.sleep(0.5)
-                clear_screen()
+                if new_phone_number != '/':
+                    cursor.execute("UPDATE user SET phone_number = ? WHERE user_id = ?", (new_phone_number, user_profile["user_id"]))  
+                    user_profile["phone_number"] = new_phone_number  
+                    user_data.commit()
+                    print("Phone number updated successfully!\n")
+                    time.sleep(0.5)
+                    clear_screen()
+                else:
+                    clear_screen()
+                    return
 
             elif editProfile_choice == "4":
                 # Delete user logic here
@@ -188,6 +200,7 @@ def editProfile(user_profile):
                 else:
                     print(Fore.YELLOW + "\nAccount deletion canceled.")
                     time.sleep(1)
+                    clear_screen()
 
 
             elif editProfile_choice == "0":
