@@ -42,6 +42,7 @@ def delete_user(cursor, user_id, connection):
 
 def editProfile(user_profile):
     """Allows the user to edit their profile and saves changes to the database."""
+    clear_screen()
     while True:
         # header of home
         print(Fore.GREEN + Style.BRIGHT +"=" * 200)
@@ -52,9 +53,7 @@ def editProfile(user_profile):
         print(Fore.YELLOW + Style.BRIGHT + "██╔══╝  ██║  ██║██║   ██║       ██╔═══╝ ██╔══██╗██║   ██║██╔══╝  ██║██║     ██╔══╝  ")
         print(Fore.YELLOW + Style.BRIGHT + "███████╗██████╔╝██║   ██║       ██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████")
         print(Fore.YELLOW + Style.BRIGHT + "╚══════╝╚═════╝ ╚═╝   ╚═╝       ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝")
-        print("")
-        print(Fore.GREEN + Style.BRIGHT +"=" * 200)        
-        print("")
+   
 
 
         print(Fore.GREEN + Style.BRIGHT +"=" * 200)
@@ -93,7 +92,7 @@ def editProfile(user_profile):
                 print(Fore.GREEN + "=" * 100)
                 print("")
                 print(Fore.YELLOW + Style.BRIGHT + "Type '/' at any time to go back to the main menu.\n")
-
+                
                 new_password = input("\nEnter new password: ").strip()
                 cursor.execute("UPDATE user SET password = ? WHERE user_id = ?", (new_password, user_profile["user_id"]))  
                 user_profile["password"] = new_password  
@@ -181,6 +180,7 @@ def editProfile(user_profile):
                         # Redirect to startup page after deletion
                         from src.startup_page import startup
                         startup()
+                        clear_screen()
                         break  # Exit the loop after redirecting
                     except sqlite3.Error as e:
                         print(Fore.RED + f"\nDatabase error: {e}")
@@ -195,6 +195,7 @@ def editProfile(user_profile):
                 print("Exiting Edit Options...\n")
                 time.sleep(0.5)
                 from src.profile_page import profile_page
+                clear_screen()
                 break
 
             else:
