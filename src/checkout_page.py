@@ -1,6 +1,5 @@
 from datetime import datetime
 import sqlite3
-import uuid
 
 db_path = "./database/data.db"
 
@@ -54,9 +53,9 @@ def view_cart(cart_items, total_cost):
         print("\nYour cart is empty.")
     else:
         print("\nYour Cart:")
-        for idx, item in enumerate(cart_items, start=1):
+        for item_number, item in enumerate(cart_items, start=1):
             product_name, price, quantity, total_price = item
-            print(f"{idx}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
+            print(f"{item_number}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
         print(f"Subtotal: ₱{total_cost:,.2f}")
 
 
@@ -87,57 +86,62 @@ def checkout(user_id, cart_id):
     final_total = total_cost + shipping_fee
     print(f"Total Due (after shipping): ₱{final_total:,.2f}")
 
-    # Confirm payment
-    confirm = input("\nProceed with payment? (yes/no): ").strip().lower()
+    # Fetch payment method (use database value if available)
+    payment_method = "Cash"  # Default, but you can query if there are other options
 
-    if confirm == "yes":
+    # Confirm payment
+    confirm = input("\nProceed with payment? (y/n): ").strip().lower()
+
+    if confirm == "y":
         # Generate receipt
-        order_id = str(uuid.uuid4())[:8]  # Example order ID
         order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        order_status = "Paid"
+        order_status = None
 
         # Save checkout data
-        save_checkout_data(order_id, cart_id, address, "Cash", final_total)
+        save_checkout_data(cart_id, address, payment_method, final_total)
 
-        generate_receipt(cart_items, total_cost, 0, order_id, cart_id, address, order_date, order_status, final_total)
+        # Insert the order details into the Orders table
+        save_order_data(cart_id, user_id, address, final_total, order_date, order_status)
+
+        # Generate receipt
+        generate_receipt(cart_items, total_cost, 0, cart_id, address, order_date, order_status, final_total)
         
         print("\nCheckout Complete! You will now be redirected...")
         # You can add any post-checkout logic here (e.g., redirect to another page, etc.)
         
-    elif confirm == "no":
+    elif confirm == "n":
         print("\nPayment canceled.")
     else:
-        print("Invalid input. Please type 'yes' or 'no'.")
+        print("Invalid input. Please type 'y' or 'n'.")
 
 
 # Function to save checkout data into the database
-def save_checkout_data(checkout_id, cart_id, address, payment_method, total_due):
+def save_checkout_data(cart_id, address, payment_method, total_due):
     """Save checkout details to the database."""
     user_data = sqlite3.connect(db_path)
     cursor = user_data.cursor()
 
     query = """
-    INSERT INTO Checkout (checkout_id, cart_id, address, payment_method, total_due)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO Checkout (cart_id, address, payment_method, total_due)
+    VALUES (?, ?, ?, ?)
     """
-    cursor.execute(query, (checkout_id, cart_id, address, payment_method, total_due))
+    cursor.execute(query, (cart_id, address, payment_method, total_due))
     user_data.commit()
     print("\nCheckout data saved successfully!")
 
 
 # Function to generate and display the receipt
-def generate_receipt(cart_items, total, discount, order_id, cart_id, address, order_date, order_status, amount_paid):
+def generate_receipt(cart_items, total, discount, cart_id, address, order_date, order_status, amount_paid):
     """Generate and display receipt after successful payment."""
     print("\nReceipt:")
     print("=" * 30)
-    print(f"Order ID: {order_id}")
     print(f"Cart ID: {cart_id}")
     print(f"Order Date: {order_date}")
     print(f"Order Status: {order_status}")
     print(f"Shipping Address: {address}")
-    for idx, item in enumerate(cart_items, start=1):
+    for item_number, item in enumerate(cart_items, start=1):
         product_name, price, quantity, total_price = item
-        print(f"{idx}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
+        print(f"{item_number}. {product_name}: {quantity} x ₱{price:,.2f} = ₱{total_price:,.2f}")
     print("-" * 30)
     print(f"Subtotal: ₱{total + discount:,.2f}")
     print(f"Discount: -₱{discount:,.2f}")
@@ -145,11 +149,26 @@ def generate_receipt(cart_items, total, discount, order_id, cart_id, address, or
     print("=" * 30)
     print("Thank you for shopping with us!")
 
+
+# Function to save order data into the Orders table
+def save_order_data(cart_id, user_id, address, amount_paid, order_date, order_status):
+    """Save order details to the Orders table."""
+    user_data = sqlite3.connect(db_path)
+    cursor = user_data.cursor()
+
+    query = """
+    INSERT INTO Orders (cart_id, order_date, order_status, amount_paid, address, user_id)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """
+    cursor.execute(query, (cart_id, order_date, order_status, amount_paid, address, user_id))
+    user_data.commit()
+    print("\nOrder data saved successfully!")
+
+
 # Simulate running the checkout process
 def cart_page(user_id, cart_id):
     """Simulate displaying the cart page."""
     print("Displaying cart page...")
     checkout(user_id, cart_id)  # Proceed to checkout after viewing the cart.
 
-# Simulate running the checkout process with a user_id and cart_id
-cart_page(1, 123)  # Example user_id and cart_id for testing
+
