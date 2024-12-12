@@ -84,7 +84,7 @@ def display_products(category: Optional[str] = None) -> Dict[str, Dict]:
         input("Press Enter to continue...")
         return {}
 
-    print(Fore.YELLOW + Style.BRIGHT +"\n=== Products in {category if category else 'All Categories'} ===")
+    print(Fore.YELLOW + Style.BRIGHT + f"\n=== Products in {category if category else 'All Categories'} ===")
     print(f"{'No.':<10}{'Product Name':<25}{'Colors':<20}{'Price':<10}{'Stock':<10}{'Description':<15}")
     print(Fore.GREEN + Style.BRIGHT + "-" * 124)
     
