@@ -1,22 +1,20 @@
 from src.profile_page import profile_page
 from src.category_page import category_page
 from src.cart_page import view_cart
-import os
+import os 
 
-
-def clear_screen():
+def clear_screen(): 
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
-
-def homepage():
+def home(username):  
     while True:
-        clear_screen()  # Clears the screen before showing the menu
+        clear_screen() 
         print("=" * 40)
         print()
-        print("SELECT(1-3):")
+        print("SELECT(1-5):")
         print()
         print("1. PROFILE")
         print("2. VIEW PRODUCTS")
@@ -34,7 +32,7 @@ def homepage():
 
         if choice == "1":
             clear_screen()
-            profile_page()
+            profile_page(username)
             input("\nPress Enter to return")
 
         elif choice == "2":
@@ -60,4 +58,3 @@ def homepage():
         else:
             clear_screen()
             print("Invalid choice")
-
