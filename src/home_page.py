@@ -80,8 +80,9 @@ def home(user_id): # main function of the homepage
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
             from src.startup_page import startup
-            startup
             time.sleep(1)
+            startup()
+            
             
         else:
             clear_screen()

@@ -81,6 +81,7 @@ def order_choice(user_id):
         elif choice == "0":
             print("\nExiting Order History...")
             time.sleep(0.5)
+            clear_screen()
             break
  
         else:

@@ -62,15 +62,16 @@ def add_to_cart(product_id: str, user_id: int):
         # Display color options
         colors = product_details['colors'].split(', ')
         print("Available Colors: ")
-        for index, color in enumerate(colors, start=1):
-            print(f"{index}. {color}")
+        for prod_color, color in enumerate(colors, start=1):
+            print(f"{prod_color}. {color}")
 
         # Ask user to select a color
-        color_choice = input(f"Select color (1-{len(colors)}): ").strip()
+        color_choice = input(f"Select color (1-{len(colors)} / return): ").strip()
         
         if not color_choice.isdigit() or not 1 <= int(color_choice) <= len(colors):
             print("Invalid choice, please select a valid color.")
             return
+        
 
         selected_color = colors[int(color_choice) - 1]
         
@@ -178,3 +179,6 @@ def display_product_details(product_id: str, user_id: int) -> None:
 
         elif add_to_cart_choice == 'no':
             return
+        
+        else:
+            print("Invalid choice. Try again.")
