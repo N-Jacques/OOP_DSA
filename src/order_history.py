@@ -70,13 +70,14 @@ def order_choice(user_id):
         order_history(orders)
 
         print("\n1. Refresh Order History")
+        print("\n0. Back")
     
 
-        choice = input("\nEnter your choice. / for back: ").strip()
+        choice = input("\nEnter your choice: ").strip()
 
         if choice == "1":
             continue
-        elif choice == "/":
+        elif choice == "0":
             print("\nExiting Order History...")
             time.sleep(0.5)
             break
