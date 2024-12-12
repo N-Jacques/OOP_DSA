@@ -59,7 +59,7 @@ def home(user_id): # main function of the homepage
 
         print()
         print()
-
+        
         choice = input("Enter your choice (1-4): ").strip()
         print()
 
@@ -80,9 +80,9 @@ def home(user_id): # main function of the homepage
             clear_screen()
             print("\nThank you for shopping with us! Logging out")
             from src.startup_page import startup
-            startup()
+            startup
             time.sleep(1)
-
+            
         else:
             clear_screen()
             print("Invalid choice")

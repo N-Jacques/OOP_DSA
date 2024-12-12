@@ -50,8 +50,8 @@ def fetch_user_data(user_id):
 
 
 def display_profile(user_id):#Displays user profile information.
-        print("Accessing your profile...")
         time.sleep(1)
+
         print(Fore.GREEN + Style.BRIGHT +"=" * 40)
         print(f"Username: {user_id['username']}")
         print(f"Name: {user_id['profile_name']}")
@@ -61,13 +61,13 @@ def display_profile(user_id):#Displays user profile information.
         print(f"Address: {user_id['address']}")
         print(f"Phone number: {user_id['phone_number']}")
         print(Fore.GREEN + Style.BRIGHT +"=" * 40)
-        clear_screen()
+        
 
 def profile_page(user_id):
     profile = fetch_user_data(user_id)  # Fetch user data using the ID
 
     while True:
-        clear_screen()
+        
 
         # header of home
         print(Fore.GREEN + "=" * 60)
@@ -79,7 +79,7 @@ def profile_page(user_id):
         print(Fore.YELLOW + Style.BRIGHT + "██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████ ")
         print(Fore.YELLOW + Style.BRIGHT + "╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝")
         print("")
-        print(Fore.GREEN + "=" * 60)
+    
         print("")
 
         display_profile(profile)

@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from typing import Dict, Optional
-from src.productDetails_page import display_product_details
 from colorama import Fore, Style, init
 
 db_path = "./database/data.db"
@@ -47,14 +46,18 @@ def get_products(category: Optional[str] = None) -> Dict[str, Dict]:
                     products[product_id] = {
                         "product_name": row[1],
                         "description": row[2],
-                        "variants": []
+                        "variants": [],
+                        "price": row[4],  # Store the price as the first variant price
+                        "stock": 0  # Initialize stock count
                     }
+                # Add color, price, and stock for each variant of the product
                 products[product_id]["variants"].append({
                     "color": row[3],
                     "price": row[4],
                     "stock": row[5]
                 })
-            
+                products[product_id]["stock"] += row[5]  # Sum the stock across all variants
+
             return products
     except sqlite3.Error as e:
         print(f"Database error: {e}")
@@ -81,24 +84,21 @@ def display_products(category: Optional[str] = None) -> Dict[str, Dict]:
         input("Press Enter to continue...")
         return {}
 
-
-
-
-
-    print(f"\n=== Products in {category if category else 'All Categories'} ===")
-    print(f"{'No.':<10}{'Product Name':<25}{'Color':<20}{'Price':<10}{'Stock':<10}{'Description':<15}")
-    print(Fore.GREEN + Style.BRIGHT +"=" * 130)
+    print(Fore.YELLOW + Style.BRIGHT +"\n=== Products in {category if category else 'All Categories'} ===")
+    print(f"{'No.':<10}{'Product Name':<25}{'Colors':<20}{'Price':<10}{'Stock':<10}{'Description':<15}")
+    print(Fore.GREEN + Style.BRIGHT + "-" * 124)
     
     product_number = 1  # Start numbering from 1
     product_map = {}  # To map the numbers to product IDs
     
     for pid, details in products.items():
-        for variant in details["variants"]:
-            # Use `details["description"]` for the description
-            print(f"{product_number:<10}{details['product_name']:<25}{variant['color']:<20}₱{variant['price']:<10}{variant['stock']:<10}{details['description']:<15}")
-            product_map[product_number] = pid  # Map the number to the product_id
-            product_number += 1 
-    print(Fore.GREEN + Style.BRIGHT +"=" * 130)
+        # Collect colors and display product information
+        colors = ", ".join(sorted([variant["color"] for variant in details["variants"]]))
+        print(f"{product_number:<10}{details['product_name']:<25}{colors:<20}₱{details['price']:<10}{details['stock']:<10}{details['description']:<15}")
+        product_map[product_number] = pid  # Map the number to the product_id
+        product_number += 1 
+
+    print(Fore.GREEN + Style.BRIGHT + "-" * 124)
     return product_map
 
 def product_selection(filtered_products: Dict[int, str]) -> Optional[str]:
