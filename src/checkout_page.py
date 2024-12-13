@@ -67,7 +67,9 @@ def checkout(cart_id, user_id, total_cost):
         Cart_Items.quantity, 
         Cart_Items.total_price, 
         Product_Color.color, 
-        Cart_Items.price
+        Cart_Items.price,
+        Product_Color.product_color_id,
+        Product_Color.stock
     FROM Cart_Items
     INNER JOIN Product_Color ON Cart_Items.product_color_id = Product_Color.product_color_id
     INNER JOIN Product ON Product_Color.product_id = Product.product_id
@@ -82,7 +84,7 @@ def checkout(cart_id, user_id, total_cost):
 
     total_cost = 0
     for item in cart_items:
-        cart_item_id, product_name, quantity, total_price, color, price = item
+        cart_item_id, product_name, quantity, total_price, color, price, product_color_id, stock = item
         total_cost += total_price
         print(f"{cart_item_id:<10} {product_name:<20} {color:<10} {price:<12.2f} {quantity:<10} {total_price:<15.2f}")
 
@@ -122,7 +124,21 @@ def checkout(cart_id, user_id, total_cost):
         user_data.commit()
         clear_screen()
 
-        # Step 9: Display order confirmation
+        # Step 9: Update stock levels for each product
+        for item in cart_items:
+            product_color_id, quantity, stock = item[6], item[2], item[7]
+            if stock >= quantity:
+                new_stock = stock - quantity
+                update_stock_query = "UPDATE Product_Color SET stock = ? WHERE product_color_id = ?"
+                cursor.execute(update_stock_query, (new_stock, product_color_id))
+            else:
+                print(Fore.RED + f"Error: Not enough stock for {item[1]} ({item[4]}).")
+                user_data.rollback()
+                return
+
+        user_data.commit()
+
+        # Step 10: Display order confirmation
         order_id = cursor.lastrowid
         print("\n" + "=" * 39)
         print(Fore.GREEN + "Checkout Complete! Your order has been successfully placed.")

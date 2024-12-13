@@ -115,3 +115,4 @@ def profile_page(user_id):
         else:
             print("Invalid choice! Please try again.")
             time.sleep(0.5)
+            clear_screen()
