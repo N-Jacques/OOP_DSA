@@ -1,74 +1,164 @@
-# checkout_page.py
+import sqlite3
+import os
+import time
+from colorama import Fore, Style, init
+from datetime import datetime
 
-# Static list of products (as dummy data)
-products = {
-    "T-shirt": 299.99,
-    "Gold Ring": 999.99,
-    "Rice Cooker": 1499.99,
-    "Shampoo": 199.99,
-    "Frying Pan": 599.99
-}
 
-def view_cart(cart):
-    """Display the cart contents."""
-    if not cart:
-        print("\nYour cart is empty.")
-        return 0
+db_path = "./database/data.db"
+
+def clear_screen():  # clears screen
+    if os.name == 'nt':
+        os.system('cls')
     else:
-        print("\nYour Cart:")
-        total_cost = 0
-        for product, quantity in cart.items():
-            cost = products[product] * quantity
-            total_cost += cost
-            print(f"{product}: {quantity} x ₱{products[product]:,.2f} = ₱{cost:,.2f}")
-        print(f"Subtotal: ₱{total_cost:,.2f}")
-        return total_cost
+        os.system('clear')
 
-def apply_discounts(total):
-    """Apply discounts based on total cost."""
-    discount = 0
-    if total >= 100000:
-        discount = total * 0.10
-        print(f"Discount applied: ₱{discount:,.2f} (10% off)")
-    elif total >= 50000:
-        discount = total * 0.05
-        print(f"Discount applied: ₱{discount:,.2f} (5% off)")
-    return discount
+def clear_cart(cart_id):
+    """Clear the items from the cart in the database."""
+    try:
+        user_data = sqlite3.connect(db_path)
+        cursor = user_data.cursor()
+        
+        # Delete items from Cart_Items table
+        delete_query = "DELETE FROM Cart_Items WHERE cart_id = ?"
+        cursor.execute(delete_query, (cart_id,))
+        user_data.commit()
+        print(Fore.GREEN + "Cart items cleared successfully.")
+    except sqlite3.Error as e:
+        print(Fore.RED + f"Error clearing cart: {e}")
+    finally:
+        user_data.close()
 
-def checkout(cart, total_cost):
-    """Checkout and generate receipt."""
-    print("\nCheckout:")
-    if not cart:
-        print("Your cart is empty. Add items before checking out.")
+def checkout(cart_id, user_id, total_cost):
+    """Handle the checkout process."""
+    user_data = sqlite3.connect(db_path)
+    cursor = user_data.cursor()
+
+    # Step 1: Fetch user information (address) from the User table
+    query = "SELECT first_name, last_name, address FROM User WHERE user_id = ?"
+    cursor.execute(query, (user_id,))
+    user_info = cursor.fetchone()
+
+    if user_info is None:
+        print(Fore.RED + Style.BRIGHT + "User not found.")
         return
 
-    total_cost = view_cart(cart)  # Display the cart and total cost
-    discount = apply_discounts(total_cost)
-    final_total = total_cost - discount
+    first_name, last_name, address = user_info
 
-    print(f"Final Total: ₱{final_total:,.2f}")
-    while True:
-        confirm = input("Proceed with payment? (yes/no): ").strip().lower()
-        if confirm == "yes":
-            print("\nPayment successful! Here's your receipt:")
-            generate_receipt(cart, final_total, discount)
-            break
-        elif confirm == "no":
-            print("\nPayment canceled.")
-            break
-        else:
-            print("Invalid input. Please type 'yes' or 'no'.")
+    # Step 2: Display order summary
+    clear_screen()
+    print(Fore.GREEN + "=" * 39)
+    print(Fore.YELLOW + Style.BRIGHT + "██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗ ██████╗ ██╗   ██╗████████╗")
+    print(Fore.YELLOW + Style.BRIGHT + "██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔═══██╗██║   ██║╚══██╔══╝")
+    print(Fore.YELLOW + Style.BRIGHT + "██║     ███████║█████╗  ██║     █████╔╝ ██║   ██║██║   ██║   ██║   ")
+    print(Fore.YELLOW + Style.BRIGHT + "██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██║   ██║██║   ██║   ██║   ")
+    print(Fore.YELLOW + Style.BRIGHT + "╚██████╗██║  ██║███████╗╚██████╗██║  ██╗╚██████╔╝╚██████╔╝   ██║   ")
+    print(Fore.YELLOW + Style.BRIGHT + " ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝    ╚═╝   ")
 
-def generate_receipt(cart, total, discount):
-    """Generate and display receipt after successful payment."""
-    print("\nReceipt:")
-    print("=" * 30)
-    for product, quantity in cart.items():
-        cost = products[product] * quantity
-        print(f"{product}: {quantity} x ₱{products[product]:,.2f} = ₱{cost:,.2f}")
-    print("-" * 30)
-    print(f"Subtotal: ₱{total:,.2f}")
-    print(f"Discount: -₱{discount:,.2f}")
-    print(f"Total Paid: ₱{total:,.2f}")
-    print("=" * 30)
-    print("Thank you for shopping with us!")
+    print(Fore.GREEN + "=" * 39)
+    print("\nYour Cart Items:")
+    print("=" * 85)
+
+    # Step 3: Retrieve the cart items for the user and display them
+    query = """
+    SELECT 
+        Cart_Items.cart_item_id, 
+        Product.product_name, 
+        Cart_Items.quantity, 
+        Cart_Items.total_price, 
+        Product_Color.color, 
+        Cart_Items.price,
+        Product_Color.product_color_id,
+        Product_Color.stock
+    FROM Cart_Items
+    INNER JOIN Product_Color ON Cart_Items.product_color_id = Product_Color.product_color_id
+    INNER JOIN Product ON Product_Color.product_id = Product.product_id
+    WHERE Cart_Items.cart_id = ?
+    """
+    cursor.execute(query, (cart_id,))
+    cart_items = cursor.fetchall()
+
+    if not cart_items:
+        print("Your cart is empty.")
+        return
+
+    total_cost = 0
+    for item in cart_items:
+        cart_item_id, product_name, quantity, total_price, color, price, product_color_id, stock = item
+        total_cost += total_price
+        print(f"{cart_item_id:<10} {product_name:<20} {color:<10} {price:<12.2f} {quantity:<10} {total_price:<15.2f}")
+
+    print("=" * 85)
+    print(f"\nTotal Cost: Php{total_cost:.2f}")
+    print(f"Total Items: {len(cart_items)}")
+    
+    # Step 4: Show shipping address
+    print("\nShipping Address:")
+    print("-" * 20)
+    print(f"{first_name} {last_name}\n{address}")
+    print("=" * 20)
+
+    # Step 5: Include shipping fee (hardcoded for simplicity)
+    shipping_fee = 40.00
+    total_due = total_cost + shipping_fee
+
+    print(f"Shipping Fee: Php{shipping_fee:.2f}")
+    print(f"Total Due (after shipping): Php{total_due:.2f}")
+
+    # Step 6: Payment method (using default method)
+    payment_method = "Cash on Delivery"
+    print(f"Payment Method: {payment_method}")
+
+    # Step 7: Confirm to proceed with payment
+    proceed = input("\nProceed with payment? (y/n): ").strip().lower()
+    if proceed == "y":
+        # Step 8: Insert order into Orders table
+        order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        order_status = "Pending"
+        
+        insert_order_query = """
+        INSERT INTO Orders (user_id, cart_id, address, amount_paid, order_date, order_status)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """
+        cursor.execute(insert_order_query, (user_id, cart_id, address, total_due, order_date, order_status))
+        user_data.commit()
+        clear_screen()
+
+        # Step 9: Update stock levels for each product
+        for item in cart_items:
+            product_color_id, quantity, stock = item[6], item[2], item[7]
+            if stock >= quantity:
+                new_stock = stock - quantity
+                update_stock_query = "UPDATE Product_Color SET stock = ? WHERE product_color_id = ?"
+                cursor.execute(update_stock_query, (new_stock, product_color_id))
+            else:
+                print(Fore.RED + f"Error: Not enough stock for {item[1]} ({item[4]}).")
+                user_data.rollback()
+                return
+
+        user_data.commit()
+
+        # Step 10: Display order confirmation
+        order_id = cursor.lastrowid
+        print("\n" + "=" * 39)
+        print(Fore.GREEN + "Checkout Complete! Your order has been successfully placed.")
+        print("=" * 39)
+        print("\nOrder Details:")
+        print("-" * 20)
+        print(f"Order ID: {order_id}")
+        print(f"Order Date: {order_date}")
+        print(f"Order Status: {order_status}")
+        print(f"Shipping Address: {address}")
+        
+        print("\nItems Ordered:")
+        for item in cart_items:
+            product_name, quantity = item[1], item[2]
+            print(f"{product_name} (Quantity: {quantity})")
+        
+        print(f"\nTotal Amount Paid: Php{total_due:.2f}")
+        print("\nThank you for shopping with us!")
+        
+        time.sleep(2)
+        clear_cart(cart_id)
+    else:
+        print("Checkout cancelled.")
