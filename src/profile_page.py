@@ -1,55 +1,118 @@
 import os
 import time
-from src.editProfile_page import editProfile
+import sqlite3
+from colorama import Fore, Style, init
+import sys
 
+from src.editProfile_page import editProfile  
 
-profile = {
-    "username": "default_user",
-    "profile_name": "Default Name",
-    "password": "default_password",
-    "address": "default_address"
-}
+db_path = "./database/data.db"
+user_data = sqlite3.connect(db_path)  
 
-
-def clear_screen():
-    if os.name == 'nt':
+def clear_screen(): #Clears the terminal screen.
+    if os.name == 'nt':  # For Windows
         os.system('cls')
-    else:
+    else:  # For macOS/Linux
         os.system('clear')
 
+def verify_user(user_id):#Verify if the provided username exist in the database.
+    try:
+        cursor = user_data.cursor()
+        query = "SELECT * FROM User WHERE user_id = ?"
+        cursor.execute(query, (user_id))
+        result = cursor.fetchone()
+        return result is not None
+    
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return False
 
-def display_profile():
-    print("Accessing your profile...")
-    print()
+def fetch_user_data(user_id):
+    cursor = user_data.cursor()
+    cursor.execute(
+        "SELECT user_id, username, first_name, last_name, password, address, phone_number FROM user WHERE user_id = ?", (user_id,)
+    )  
+    user = cursor.fetchone()  # Fetch row
+    if user:
+        return {
+            "user_id": user[0],  # Include user_id here
+            "username": user[1],
+            "profile_name": f"{user[2]} {user[3]}",  # Combine first_name and last_name
+            "password": user[4],  # Now including the password field
+            "address": user[5],
+            "phone_number": user[6],
+        }      
+    else:
+        print("User not found in the database.")
+        time.sleep(2)
+        clear_screen()
+        return None
 
-    print("=" * 40)
-    print(f"Username: {profile['username']}")
-    print(f"Name: {profile['profile_name']}")
-    print(f"Address: {profile['address']}")
-    print(f"Password: {profile['password']}")
-    print(f"Order History: 5 orders")
-    print("=" * 40)
 
-def profile_page():
+def display_profile(user_id):#Displays user profile information.
+        time.sleep(1)
+
+        print(Fore.GREEN + Style.BRIGHT +"=" * 40)
+        print(f"Username: {user_id['username']}")
+        print(f"Name: {user_id['profile_name']}")
+        # Dynamically generate asterisks based on password length
+        password_length = len(user_id['password'])
+        print(f"Password: {'*' * password_length}")
+        print(f"Address: {user_id['address']}")
+        print(f"Phone number: {user_id['phone_number']}")
+        print(Fore.GREEN + Style.BRIGHT +"=" * 40)
+        
+
+def profile_page(user_id):
+    profile = fetch_user_data(user_id)  # Fetch user data using the ID
+
     while True:
         
-        print("\nProfile Page:")
-        print("1. Display Profile")
-        print("2. Edit Profile")
-        print("3. Exit Profile Page")
 
-        profile_choice = input("\nEnter your choice (1-3): ")
-        clear_screen()
-        
+        # header of home
+        print(Fore.GREEN + "=" * 60)
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "██████╗ ██████╗  ██████╗ ███████╗██╗██╗     ███████╗")
+        print(Fore.YELLOW + Style.BRIGHT + "██╔══██╗██╔══██╗██╔═══██╗██╔════╝██║██║     ██╔════╝")
+        print(Fore.YELLOW + Style.BRIGHT + "██████╔╝██████╔╝██║   ██║█████╗  ██║██║     █████╗  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██╔═══╝ ██╔══██╗██║   ██║██╔══╝  ██║██║     ██╔══╝  ")
+        print(Fore.YELLOW + Style.BRIGHT + "██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████ ")
+        print(Fore.YELLOW + Style.BRIGHT + "╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝")
+        print("")
+    
+        print("")
+
+        display_profile(profile)
+        print("1. Edit Profile")
+        print("2. Order History")
+        print("3. Log out")
+
+        profile_choice = input("\nEnter your choice (1-3) 0 for back: ").strip()
 
         if profile_choice == "1":
-            display_profile()
+            clear_screen()
+            editProfile(profile)  # Pass the profile dictionary to editProfile
+            profile = fetch_user_data(user_id)  # Reload profile after edits
+
         elif profile_choice == "2":
-            editProfile(profile)  # Pass the shared profile dictionary
-        elif profile_choice == "3":
+            from src.order_history import order_choice
+            order_choice(user_id)
+            time.sleep(0.5)
+
+        elif profile_choice =="3":
+             from src.startup_page import startup
+             clear_screen()
+             print("\nThank you for shopping with us! Logging out")
+             time.sleep(0.5)
+             startup()
+
+        elif profile_choice == "0":
             print("Exiting Profile Page...")
-            from home_page import homepage
-            homepage()
-            break
+            from src.home_page import home
+            home(user_id)  # Pass the integer user_id
+            break    
+
         else:
-            print("ERROR! TRY AGAIN.\n")
+            print("Invalid choice! Please try again.")
+            time.sleep(0.5)
+            clear_screen()

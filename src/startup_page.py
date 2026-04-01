@@ -1,6 +1,5 @@
 from src.login_page import login
 from src.signup_page import signup
-from src.home_page import homepage
 from colorama import Fore, Back, Style, init
 import sys
 import time 
@@ -12,22 +11,24 @@ init(autoreset=True) # Initialize Colorama
 def clear_screen(): # Clear screen every input 
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
 def startup(): # 
     while True:  # Allow the user to return here
         try:
             clear_screen()
 
-            print(Fore.GREEN + "="* 65)
+            print(Fore.GREEN + "="* 90)
             print()
-            print(Fore.YELLOW + Style.BRIGHT + "██╗  ██╗ ██████╗ ██╗      █████╗ ██████╗ ███████╗██╗     ███████╗")
-            print(Fore.YELLOW + Style.BRIGHT + "██║  ██║██╔═══██╗██║     ██╔══██╗██╔══██╗██╔════╝██║     ██╔════╝")
-            print(Fore.YELLOW + Style.BRIGHT + "███████║██║   ██║██║     ███████║██████╔╝█████╗  ██║     ███████╗")
-            print(Fore.YELLOW + Style.BRIGHT + "██╔══██║██║   ██║██║     ██╔══██║██╔══██╗██╔══╝  ██║     ╚════██║")
-            print(Fore.YELLOW + Style.BRIGHT + "██║  ██║╚██████╔╝███████╗██║  ██║██████╔╝███████╗███████╗███████║")
-            print(Fore.YELLOW + Style.BRIGHT + "╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝")
+            print(Fore.YELLOW + Style.BRIGHT + "██████╗ ███████╗███████╗████████╗    ███████╗██████╗ ██╗███████╗███╗   ██╗██████╗ ███████╗")
+            print(Fore.YELLOW + Style.BRIGHT + "██╔══██╗██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔══██╗██╔════╝")
+            print(Fore.YELLOW + Style.BRIGHT + "██████╔╝█████╗  ███████╗   ██║       █████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║  ██║███████╗")
+            print(Fore.YELLOW + Style.BRIGHT + "██╔══██╗██╔══╝  ╚════██║   ██║       ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║  ██║╚════██║")
+            print(Fore.YELLOW + Style.BRIGHT + "██████╔╝███████╗███████║   ██║       ██║     ██║  ██║██║███████╗██║ ╚████║██████╔╝███████║")
+            print(Fore.YELLOW + Style.BRIGHT + "╚═════╝ ╚══════╝╚══════╝   ╚═╝       ╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝")
+
             print()
-            print(Fore.WHITE + Style.BRIGHT + "\t\t\t   SHOPPING" + Style.RESET_ALL)
-            print(Fore.GREEN + "=" * 65 + "\n")
+            print(Fore.WHITE + Style.BRIGHT + "\t\t\t\t\tSHOPPING" + Style.RESET_ALL)
+            print(Fore.GREEN + "=" * 90 + "\n")
             print(Fore.WHITE + "To browse our products, Login or Sign up to get started.\n")
 
 
@@ -43,9 +44,7 @@ def startup(): #
                 clear_screen()
                 login()
                 clear_screen()
-                homepage()
                 
-
             elif startup_choice == 2:  # Sign-up Page
                 clear_screen()
                 signup()
@@ -68,10 +67,12 @@ def startup(): #
                 sys.exit()
         
             else:
-                print("Invalid choice. Please select a valid option.")
+                print(Fore.RED + Style.BRIGHT +"Invalid choice. Please select a valid option.")
+                time.sleep(0.5)
                 
 
         except ValueError:
-            print("Invalid input. Please enter a number")
+            print(Fore.RED + Style.BRIGHT +"Invalid input. Please enter a number")
+            time.sleep(0.5)
             
 
